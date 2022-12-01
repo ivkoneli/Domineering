@@ -69,6 +69,7 @@ def PlayMove(player, unFormatedMove,table):
             return "X"
     else:
         print("Not valid")
+        return False
 
 
 def DecodeMove(move,table):
@@ -81,7 +82,7 @@ def DecodeMove(move,table):
 
 
 def GameOver(player):
-    if player == "0":
+    if player == "O":
         for i in range(len(table)):
             for j in range(len(table)-1):
                 if table[i][j] == '-' and table[i][j+1] == '-':
