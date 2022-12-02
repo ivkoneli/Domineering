@@ -18,38 +18,38 @@ pygame.init()
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Domineering")
 tabla= Domineering.CreateTable(8,8)
-Domineering.PrintTable(tabla)
-Domineering.PlayMove("X",(1, "G"),tabla)
-Domineering.PlayMove("X",(3, "G"),tabla)
-Domineering.PlayMove("X",(5, "G"),tabla)
-Domineering.PlayMove("X",(7, "G"),tabla)
-Domineering.PlayMove("X",(1, "H"),tabla)
-Domineering.PlayMove("X",(3, "H"),tabla)
-Domineering.PlayMove("X",(5, "H"),tabla)
-Domineering.PlayMove("X",(7, "H"),tabla)
-Domineering.PlayMove("X",(1, "F"),tabla)
-Domineering.PlayMove("X",(3, "F"),tabla)
-Domineering.PlayMove("X",(5, "F"),tabla)
-Domineering.PlayMove("X",(7, "F"),tabla)
+#Domineering.PrintTable(tabla)
+Domineering.PlayMove("X",(2, "A"),tabla)
+#Domineering.PlayMove("X",(3, "G"),tabla)
+#Domineering.PlayMove("X",(5, "G"),tabla)
+#Domineering.PlayMove("X",(7, "G"),tabla)
+#Domineering.PlayMove("X",(1, "H"),tabla)
+#Domineering.PlayMove("X",(3, "H"),tabla)
+#Domineering.PlayMove("X",(5, "H"),tabla)
+#Domineering.PlayMove("X",(7, "H"),tabla)
+#Domineering.PlayMove("X",(1, "F"),tabla)
+#Domineering.PlayMove("X",(3, "F"),tabla)
+#Domineering.PlayMove("X",(5, "F"),tabla)
+#Domineering.PlayMove("X",(7, "F"),tabla)
 #Domineering.PlayMove("X",(6, "G"),tabla)
 #Domineering.PlayMove("X",(7, "G"),tabla)
 #Domineering.PlayMove("X",(8, "G"),tabla)
 Domineering.PlayMove("O",(4, "B"),tabla)
-Domineering.PlayMove("O",(5, "B"),tabla)
-Domineering.PlayMove("O",(6, "B"),tabla)
-Domineering.PlayMove("O",(7, "B"),tabla)
-Domineering.PlayMove("O",(8, "B"),tabla)
-Domineering.PlayMove("O",(1, "B"),tabla)
-Domineering.PlayMove("O",(2, "B"),tabla)
-Domineering.PlayMove("O",(3, "B"),tabla)
-Domineering.PlayMove("O",(4, "D"),tabla)
-Domineering.PlayMove("O",(5, "D"),tabla)
-Domineering.PlayMove("O",(6, "D"),tabla)
-Domineering.PlayMove("O",(7, "D"),tabla)
-Domineering.PlayMove("O",(8, "D"),tabla)
-Domineering.PlayMove("O",(1, "D"),tabla)
-Domineering.PlayMove("O",(2, "D"),tabla)
-Domineering.PlayMove("O",(3, "D"),tabla)
+#Domineering.PlayMove("O",(5, "B"),tabla)
+#Domineering.PlayMove("O",(6, "B"),tabla)
+#Domineering.PlayMove("O",(7, "B"),tabla)
+#Domineering.PlayMove("O",(8, "B"),tabla)
+#Domineering.PlayMove("O",(1, "B"),tabla)
+#Domineering.PlayMove("O",(2, "B"),tabla)
+#Domineering.PlayMove("O",(3, "B"),tabla)
+#Domineering.PlayMove("O",(4, "D"),tabla)
+#Domineering.PlayMove("O",(5, "D"),tabla)
+#Domineering.PlayMove("O",(6, "D"),tabla)
+#Domineering.PlayMove("O",(7, "D"),tabla)
+#Domineering.PlayMove("O",(8, "D"),tabla)
+#Domineering.PlayMove("O",(1, "D"),tabla)
+#Domineering.PlayMove("O",(2, "D"),tabla)
+#Domineering.PlayMove("O",(3, "D"),tabla)
 
 column_input_rect = pygame.Rect(460,25,50,35)
 row_input_rect = pygame.Rect(385,25,50,35)
@@ -91,14 +91,17 @@ def draw_window(moveText):
             squareColor = (255,255,255)
             pygame.draw.rect(WIN ,squareColor ,
             pygame.Rect(150+(y*squareDim),100+(x*squareDim) , squareDim,squareDim), 2)
-            if tabla[x][y] == "X":
-                squareColor = ORANGE
-                pygame.draw.rect(WIN ,squareColor ,
-                pygame.Rect(150+(y*squareDim)+7.5,100+(x*squareDim) , squareDim-15 ,squareDim))
-            if tabla[x][y] == "O":
-                squareColor = BLACK
-                pygame.draw.rect(WIN ,squareColor ,
-                pygame.Rect(150+(y*squareDim),100+(x*squareDim)+7.5 , squareDim,squareDim-15))
+
+        for x in range(len(tabla)):
+            for y in range(len(tabla)):
+                if tabla[x][y] == "X" and tabla[x-1][y] == "X":
+                    squareColor = ORANGE
+                    pygame.draw.rect(WIN ,squareColor ,
+                    pygame.Rect(150+(y*squareDim)+7.5,100+(x*squareDim)+12.5 , squareDim-15 ,2*squareDim-25))
+                if tabla[x][y] == "O" and tabla[x][y+1] == "O":
+                    squareColor = BLACK
+                    pygame.draw.rect(WIN ,squareColor ,
+                    pygame.Rect(150+(y*squareDim)+12.5,100+(x*squareDim)+7.5 , 2*squareDim-25,squareDim-15))
 
     pygame.display.update()
 
