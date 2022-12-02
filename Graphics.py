@@ -154,11 +154,11 @@ def main():
                         if kraj :
                             if not player : 
                                 text_surface = GAMEOVER_FONT.render("X WINS",True,(0,0,0))
-                                WIN.blit(text_surface,(300,20))
+                                WIN.blit(text_surface,(column_input_rect.x + 20 , column_input_rect.y + 10))
                                 print("X WINS")
                             else :
                                 text_surface = GAMEOVER_FONT.render("O WINS",True,(0,0,0))
-                                WIN.blit(text_surface,(300,20))
+                                WIN.blit(text_surface,(column_input_rect.x + 20 , column_input_rect.y + 10))
                                 print("O WINS")
 
                     else:

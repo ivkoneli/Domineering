@@ -1,9 +1,40 @@
 player = "X"
+pc = False
+table = []
+pcPlayer=""
+myPlayer=""
 
 def FirstMove():
-    print("Ko igra prvi?")
+    answer = input("Do you want to play first?\n")
+    yes = "yes"
+    no = "no"
+    if answer == yes:
+        myPlayer="X"
+        pcPlayer="O"
+        print("1: me")
+        print("2: pc")
+    elif answer == no:
+        myPlayer="O"
+        pcPlayer="X"
+        print("1: pc")
+        print("2: me")
+    else:
+        print("Invalid input!")
 
-table = []
+
+def OpponentSelection():
+    answer = input("Do you want to play against computer?\n")
+    yes = "yes"
+    no = "no"
+    if answer == yes:
+        pc = True
+        FirstMove()
+    elif answer == no:
+        print("Your opponent is human")
+    else:
+        print("Invalid input!")
+
+
 def CreateTable(x, y):
     table = list()
     for i in range(x):
@@ -61,19 +92,29 @@ def PlayMove(player, unFormatedMove,table):
             table[move[0]][move[1]] = player
             table[move[0]-1][move[1]] = player
             PrintTable(table)
-            return "O"
+            istheGameOver = GameOver(player)
+            if istheGameOver == False:
+                return "O"
+            else:
+                print(istheGameOver[1], "Wins!")
         else:
             table[move[0]][move[1]] = player
             table[move[0]][move[1]+1] = player
             PrintTable(table)
-            return "X"
+            istheGameOver = GameOver(player)
+            if istheGameOver == False:
+                return "X"
+            else:
+                print(istheGameOver[1], "Wins!")
     else:
         print("Not valid")
         return False
 
 
 def DecodeMove(move,table):
-    if move[0] == len(table):
+    if move[0] > len(table):
+        i = move[0]
+    elif move[0] == len(table):
         i=0
     else:
         i =  abs(move[0]-len(table))
@@ -82,7 +123,7 @@ def DecodeMove(move,table):
 
 
 def GameOver(player):
-    if player == "O":
+    if player == "X":
         for i in range(len(table)):
             for j in range(len(table)-1):
                 if table[i][j] == '-' and table[i][j+1] == '-':
@@ -92,14 +133,16 @@ def GameOver(player):
             for j in range(len(table)):
                 if table[i][j] == '-' and table[i+1][j] == '-':
                     return False
-
+  
     return (True, player)
 
-#table = CreateTable(8, 8)
+#OpponentSelection()
+#table = CreateTable(3, 3)
 #PrintTable(table)
-#PlayMove("O", (4, "A"))
-#PlayMove("X", (2, "G"))
-#PlayMove("X", (2, "S"))
+#PlayMove("O", (4, "A"), table)
+#PlayMove("O", (2, "A"), table)
+#PlayMove("O", (3, "A"), table)
+#PlayMove("X", (1, "C"), table)
 
 
 
