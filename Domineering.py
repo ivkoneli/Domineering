@@ -84,7 +84,9 @@ def IsValid(player, move,table):
     return False
 
 
-def PlayMove(player, unFormatedMove,table):
+
+
+def PlayMove2(player, unFormatedMove,table):
     move = DecodeMove(unFormatedMove, table)
     valid = IsValid(player, move,table)
     if valid:
@@ -92,27 +94,18 @@ def PlayMove(player, unFormatedMove,table):
             table[move[0]][move[1]] = player
             table[move[0]-1][move[1]] = player
             PrintTable(table)
-            istheGameOver = GameOver(player)
-            if istheGameOver == False:
-                return "O"
-            else:
-                print(istheGameOver[1], "Wins!")
+            return "O"
         else:
             table[move[0]][move[1]] = player
             table[move[0]][move[1]+1] = player
             PrintTable(table)
-            istheGameOver = GameOver(player)
-            if istheGameOver == False:
-                return "X"
-            else:
-                print(istheGameOver[1], "Wins!")
+            return "X"
     else:
         print("Not valid")
         return False
 
-
 def DecodeMove(move,table):
-    if move[0] > len(table):
+    if move[0] > len(table) or move[0]<0:
         i = move[0]
     elif move[0] == len(table):
         i=0
@@ -136,13 +129,14 @@ def GameOver(player):
   
     return (True, player)
 
+
 #OpponentSelection()
-#table = CreateTable(3, 3)
-#PrintTable(table)
-#PlayMove("O", (4, "A"), table)
-#PlayMove("O", (2, "A"), table)
-#PlayMove("O", (3, "A"), table)
-#PlayMove("X", (1, "C"), table)
+table = CreateTable(3, 3)
+PrintTable(table)
+PlayMove("O", (1, "A"), table)
+PlayMove("O", (2, "A"), table)
+PlayMove("O", (3, "A"), table)
+PlayMove("X", (1, "C"), table)
 
 
 

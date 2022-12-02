@@ -94,7 +94,7 @@ def draw_window(moveText):
 
         for x in range(len(tabla)):
             for y in range(len(tabla)):
-                if tabla[x][y] == "X" and tabla[x-1][y] == "X":
+                if tabla[x][y] == "X" and tabla[x+1][y] == "X":
                     squareColor = ORANGE
                     pygame.draw.rect(WIN ,squareColor ,
                     pygame.Rect(150+(y*squareDim)+7.5,100+(x*squareDim)+12.5 , squareDim-15 ,2*squareDim-25))
@@ -107,7 +107,7 @@ def draw_window(moveText):
 
 def igrajPotez(moveText,player):
 
-    validanPotez =  Domineering.PlayMove(playerValue(player),(int(moveText[0]),moveText[1]),tabla)
+    validanPotez =  Domineering.PlayMove2(playerValue(player),(int(moveText[0]),moveText[1]),tabla)
     if not validanPotez:
         return False
     else :    
@@ -152,6 +152,7 @@ def main():
                             moveText = ""
                         else :
                             player = player
+
                         kraj = Domineering.GameOver(player)
                         print(kraj[0])
                         if kraj :
