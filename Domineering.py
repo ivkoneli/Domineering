@@ -1,25 +1,28 @@
 player = "X"
 pc = False
 table = []
-pcPlayer=""
-myPlayer=""
+myPlayer = ""
+pcPlayer = ""
 
 def FirstMove():
     answer = input("Do you want to play first?\n")
     yes = "yes"
     no = "no"
     if answer == yes:
-        myPlayer="X"
-        pcPlayer="O"
+        myPlayer1="X"
+        pcPlayer1="O"
         print("1: me")
         print("2: pc")
+        return (myPlayer1, pcPlayer1)
     elif answer == no:
-        myPlayer="O"
-        pcPlayer="X"
+        myPlayer1="O"
+        pcPlayer1="X"
         print("1: pc")
         print("2: me")
+        return (myPlayer1, pcPlayer1)
     else:
         print("Invalid input!")
+        return False
 
 
 def OpponentSelection():
@@ -28,9 +31,11 @@ def OpponentSelection():
     no = "no"
     if answer == yes:
         pc = True
-        FirstMove()
+        players = FirstMove()
+        return players
     elif answer == no:
         print("Your opponent is human")
+        return ("-", "-")
     else:
         print("Invalid input!")
 
@@ -84,9 +89,7 @@ def IsValid(player, move,table):
     return False
 
 
-
-
-def PlayMove2(player, unFormatedMove,table):
+def PlayMove(player, unFormatedMove,table):
     move = DecodeMove(unFormatedMove, table)
     valid = IsValid(player, move,table)
     if valid:
@@ -94,15 +97,24 @@ def PlayMove2(player, unFormatedMove,table):
             table[move[0]][move[1]] = player
             table[move[0]-1][move[1]] = player
             PrintTable(table)
-            return "O"
+            istheGameOver = GameOver(player)
+            if istheGameOver == False:
+                return "O"
+            else:
+                print(istheGameOver[1], "Wins!")
         else:
             table[move[0]][move[1]] = player
             table[move[0]][move[1]+1] = player
             PrintTable(table)
-            return "X"
+            istheGameOver = GameOver(player)
+            if istheGameOver == False:
+                return "X"
+            else:
+                print(istheGameOver[1], "Wins!")
     else:
         print("Not valid")
         return False
+
 
 def DecodeMove(move,table):
     if move[0] > len(table) or move[0]<0:
@@ -130,13 +142,15 @@ def GameOver(player):
     return (True, player)
 
 
-#OpponentSelection()
-table = CreateTable(3, 3)
-PrintTable(table)
-PlayMove("O", (1, "A"), table)
-PlayMove("O", (2, "A"), table)
-PlayMove("O", (3, "A"), table)
-PlayMove("X", (1, "C"), table)
+#players = OpponentSelection()
+#myPlayer = players[0]
+#pcPlayer = players[1]
+#table = CreateTable(3, 3)
+#PrintTable(table)
+#PlayMove("O", (1, "A"), table)
+#PlayMove("O", (2, "A"), table)
+#PlayMove("O", (3, "A"), table)
+#PlayMove("X", (1, "C"), table)
 
 
 
