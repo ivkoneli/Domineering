@@ -1,118 +1,74 @@
 import pygame
 import Domineering
+pygame.init()
 
-backgroundColor = (229,229,229)
-squareColor = ()
+BG_COLOR = (229,229,229)
+SQUARECOLOR = ()
 ORANGE = (255,128,0)
 BLACK = (0,0,0)
 WHITE = (255,255,255)
-squareDim = 75
-tabla = Domineering.table
-FPS = 60
+GREEN = (0, 200, 0)
+SQUARE_DIM = 75
+
 WIDTH, HEIGHT = 900,800
-
-PLAYER = True
-
-pygame.init()
-
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Domineering")
+
+FPS = 60
+PLAYER = True
+
+tabla = Domineering.table
 tabla= Domineering.CreateTable(8,8)
-#Domineering.PrintTable(tabla)
-Domineering.PlayMove("X",(2, "A"),tabla)
-#Domineering.PlayMove("X",(3, "G"),tabla)
-#Domineering.PlayMove("X",(5, "G"),tabla)
-#Domineering.PlayMove("X",(7, "G"),tabla)
-#Domineering.PlayMove("X",(1, "H"),tabla)
-#Domineering.PlayMove("X",(3, "H"),tabla)
-#Domineering.PlayMove("X",(5, "H"),tabla)
-#Domineering.PlayMove("X",(7, "H"),tabla)
-#Domineering.PlayMove("X",(1, "F"),tabla)
-#Domineering.PlayMove("X",(3, "F"),tabla)
-#Domineering.PlayMove("X",(5, "F"),tabla)
-#Domineering.PlayMove("X",(7, "F"),tabla)
-#Domineering.PlayMove("X",(6, "G"),tabla)
-#Domineering.PlayMove("X",(7, "G"),tabla)
-#Domineering.PlayMove("X",(8, "G"),tabla)
-Domineering.PlayMove("O",(4, "B"),tabla)
-#Domineering.PlayMove("O",(5, "B"),tabla)
-#Domineering.PlayMove("O",(6, "B"),tabla)
-#Domineering.PlayMove("O",(7, "B"),tabla)
-#Domineering.PlayMove("O",(8, "B"),tabla)
-#Domineering.PlayMove("O",(1, "B"),tabla)
-#Domineering.PlayMove("O",(2, "B"),tabla)
-#Domineering.PlayMove("O",(3, "B"),tabla)
-#Domineering.PlayMove("O",(4, "D"),tabla)
-#Domineering.PlayMove("O",(5, "D"),tabla)
-#Domineering.PlayMove("O",(6, "D"),tabla)
-#Domineering.PlayMove("O",(7, "D"),tabla)
-#Domineering.PlayMove("O",(8, "D"),tabla)
-#Domineering.PlayMove("O",(1, "D"),tabla)
-#Domineering.PlayMove("O",(2, "D"),tabla)
-#Domineering.PlayMove("O",(3, "D"),tabla)
+Domineering.PrintTable(tabla)
 
 column_input_rect = pygame.Rect(460,25,50,35)
-row_input_rect = pygame.Rect(385,25,50,35)
-font = pygame.font.Font('freesansbold.ttf', 18)
-GAMEOVER_FONT = pygame.font.Font('freesansbold.ttf',20)
+MOVE_FONT = pygame.font.Font('freesansbold.ttf', 18)
+GAMEOVER_FONT = pygame.font.Font('freesansbold.ttf',50)
 column_moveText =""
-text = font.render(column_moveText, True,BLACK, backgroundColor)
-textRect = text.get_rect()
-moveTextColor = WHITE
-row_moveText = " "
+MOVE_TEXT = MOVE_FONT.render(column_moveText, True,BLACK, BG_COLOR)
 active = False
 
-
-
-
-
 def draw_window(moveText):
-    WIN.fill(backgroundColor)
+    WIN.fill(BG_COLOR)
     for x in range(len(tabla)):
         c = 65
         n = 56
-        WIN.blit(font.render(chr(c+x), True,BLACK, backgroundColor),pygame.Rect(175+(x*squareDim), 75, squareDim,squareDim))
-        WIN.blit(font.render(chr(c+x), True,BLACK, backgroundColor),pygame.Rect(175+(x*squareDim),725, squareDim,squareDim))
-        WIN.blit(font.render(chr(n-x) , True,BLACK, backgroundColor),pygame.Rect(125, 125+(x*squareDim), squareDim,squareDim))
-        WIN.blit(font.render(chr(n-x) , True,BLACK, backgroundColor),pygame.Rect(775, 125+(x*squareDim), squareDim,squareDim))
-
-        #pygame.draw.rect(WIN,WHITE,row_input_rect,2)
-        #text_surface = font.render(moveText,True,(0,0,0))
-        #WIN.blit(text_surface,(row_input_rect.x + 20 , row_input_rect.y + 10))
+        WIN.blit(MOVE_FONT.render(chr(c+x), True,BLACK, BG_COLOR),pygame.Rect(175+(x*SQUARE_DIM), 75, SQUARE_DIM,SQUARE_DIM))
+        WIN.blit(MOVE_FONT.render(chr(c+x), True,BLACK, BG_COLOR),pygame.Rect(175+(x*SQUARE_DIM),725, SQUARE_DIM,SQUARE_DIM))
+        WIN.blit(MOVE_FONT.render(chr(n-x) , True,BLACK, BG_COLOR),pygame.Rect(125, 125+(x*SQUARE_DIM), SQUARE_DIM,SQUARE_DIM))
+        WIN.blit(MOVE_FONT.render(chr(n-x) , True,BLACK, BG_COLOR),pygame.Rect(775, 125+(x*SQUARE_DIM), SQUARE_DIM,SQUARE_DIM))
 
         pygame.draw.rect(WIN,WHITE,column_input_rect,2)
-        text_surface = font.render(moveText,True,(0,0,0))
+        text_surface = MOVE_FONT.render(moveText,True,(0,0,0))
         WIN.blit(text_surface,(column_input_rect.x + 20 , column_input_rect.y + 10))
 
         column_input_rect.w = max(50,text_surface.get_width() + 5)
         for y in range(len(tabla)):
-            
-            #if tabla[x][y] == "-":
-            squareColor = (255,255,255)
-            pygame.draw.rect(WIN ,squareColor ,
-            pygame.Rect(150+(y*squareDim),100+(x*squareDim) , squareDim,squareDim), 2)
+            SQUARECOLOR = (255,255,255)
+            pygame.draw.rect(WIN ,SQUARECOLOR ,
+            pygame.Rect(150+(y*SQUARE_DIM),100+(x*SQUARE_DIM) , SQUARE_DIM,SQUARE_DIM), 2)
 
-        for x in range(len(tabla)):
-            for y in range(len(tabla)):
-                if tabla[x][y] == "X" and tabla[x+1][y] == "X":
-                    squareColor = ORANGE
-                    pygame.draw.rect(WIN ,squareColor ,
-                    pygame.Rect(150+(y*squareDim)+7.5,100+(x*squareDim)+12.5 , squareDim-15 ,2*squareDim-25))
-                if tabla[x][y] == "O" and tabla[x][y+1] == "O":
-                    squareColor = BLACK
-                    pygame.draw.rect(WIN ,squareColor ,
-                    pygame.Rect(150+(y*squareDim)+12.5,100+(x*squareDim)+7.5 , 2*squareDim-25,squareDim-15))
+    for x in range(len(tabla)):
+        for y in range(len(tabla)-1):
+            if tabla[x][y] == "O" and tabla[x][y+1] == "O":
+                    SQUARECOLOR = BLACK
+                    pygame.draw.rect(WIN ,SQUARECOLOR ,
+                    pygame.Rect(150+(y*SQUARE_DIM)+12.5,100+(x*SQUARE_DIM)+7.5 , 2*SQUARE_DIM-25,SQUARE_DIM-15))
 
+    for x in range(len(tabla)-1):
+        for y in range(len(tabla)):
+            if tabla[x][y] == "X" and tabla[x+1][y] == "X":
+                    SQUARECOLOR = ORANGE
+                    pygame.draw.rect(WIN ,SQUARECOLOR ,
+                    pygame.Rect(150+(y*SQUARE_DIM)+7.5,100+(x*SQUARE_DIM)+12.5 , SQUARE_DIM-15 ,2*SQUARE_DIM-25))
     pygame.display.update()
 
 def igrajPotez(moveText,player):
 
-    validanPotez =  Domineering.PlayMove2(playerValue(player),(int(moveText[0]),moveText[1]),tabla)
+    validanPotez =  Domineering.PlayMove(playerValue(player),(int(moveText[0]),moveText[1]),tabla)
     if not validanPotez:
         return False
     else :    
-        print(player , not player)
-        #player = not player
         print(moveText[0],moveText[1])
         return True
 
@@ -124,6 +80,25 @@ def playerValue(player):
     return 'O'    
 
 
+def drawEnd(player):
+    pygame.time.delay(500)
+    if player == "X":
+        text_surface = GAMEOVER_FONT.render("X WINS!",True, GREEN)
+        WIN.blit(text_surface,(370 , 350))
+    else:
+        text_surface = GAMEOVER_FONT.render("O WINS!",True, GREEN)
+        WIN.blit(text_surface,(370 , 350))
+    pygame.display.update()
+    pygame.time.delay(4000)
+    Reset()
+
+
+def Reset():
+    for i in range(len(tabla)):
+        for j in range(len(tabla)):
+            tabla[i][j] = "-"
+
+
 def main():
     clock = pygame.time.Clock()
     run = True 
@@ -133,7 +108,7 @@ def main():
 
     while(run):
         for event in pygame.event.get():
-            draw_window(moveText)
+            #draw_window(moveText)
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -147,28 +122,25 @@ def main():
                         moveText = moveText[:-1]
                     elif event.key == pygame.K_RETURN:
                         valid = igrajPotez(moveText,player)
+                        draw_window(moveText)
                         if valid :
+                            kraj = Domineering.GameOver(playerValue(player), tabla)
                             player =  not player
                             moveText = ""
+                            print("Da li je kraj",kraj[0])
+                            if kraj[0] :
+                                if not player : 
+                                    drawEnd(player)
+                                else :
+                                    drawEnd(player)
+                                draw_window(moveText)
                         else :
                             player = player
-
-                        kraj = Domineering.GameOver(player)
-                        print(kraj[0])
-                        if kraj :
-                            if not player : 
-                                text_surface = GAMEOVER_FONT.render("X WINS",True,(0,0,0))
-                                WIN.blit(text_surface,(column_input_rect.x + 20 , column_input_rect.y + 10))
-                                print("X WINS")
-                            else :
-                                text_surface = GAMEOVER_FONT.render("O WINS",True,(0,0,0))
-                                WIN.blit(text_surface,(column_input_rect.x + 20 , column_input_rect.y + 10))
-                                print("O WINS")
 
                     else:
                         moveText+=event.unicode
      
-            #draw_window(moveText)
+            draw_window(moveText)
 
     clock.tick(FPS) 
     pygame.quit()            

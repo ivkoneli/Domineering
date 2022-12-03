@@ -97,20 +97,24 @@ def PlayMove(player, unFormatedMove,table):
             table[move[0]][move[1]] = player
             table[move[0]-1][move[1]] = player
             PrintTable(table)
-            istheGameOver = GameOver(player)
-            if istheGameOver == False:
-                return "O"
+            istheGameOver = GameOver(player, table)
+            print(istheGameOver)
+            if istheGameOver[0] == False:
+                return True
             else:
-                print(istheGameOver[1], "Wins!")
+                print(istheGameOver[1], "X Wins!")
+                return True
         else:
             table[move[0]][move[1]] = player
             table[move[0]][move[1]+1] = player
             PrintTable(table)
-            istheGameOver = GameOver(player)
-            if istheGameOver == False:
-                return "X"
+            istheGameOver = GameOver(player, table)
+            print(istheGameOver)
+            if istheGameOver[0] == False:
+                return True
             else:
-                print(istheGameOver[1], "Wins!")
+                print(istheGameOver[1], "O Wins!")
+                return True
     else:
         print("Not valid")
         return False
@@ -127,17 +131,17 @@ def DecodeMove(move,table):
     return (i, j)
 
 
-def GameOver(player):
+def GameOver(player, table):
     if player == "X":
         for i in range(len(table)):
             for j in range(len(table)-1):
                 if table[i][j] == '-' and table[i][j+1] == '-':
-                    return False
+                    return (False, player)
     else:
         for i in range(len(table)-1):
             for j in range(len(table)):
                 if table[i][j] == '-' and table[i+1][j] == '-':
-                    return False
+                    return (False, player)
   
     return (True, player)
 
