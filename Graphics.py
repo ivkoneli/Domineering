@@ -2,6 +2,9 @@ import pygame
 import Domineering
 pygame.init()
 
+
+#defining variables  
+
 BG_COLOR = (229,229,229)
 SQUARECOLOR = ()
 ORANGE = (255,128,0)
@@ -9,59 +12,100 @@ BLACK = (0,0,0)
 WHITE = (255,255,255)
 GREEN = (0, 200, 0)
 SQUARE_DIM = 75
-
 WIDTH, HEIGHT = 900,800
+FPS = 60
+PLAYER = True
+
+# window canvas setting 
+
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Domineering")
 
-FPS = 60
-PLAYER = True
+# loading and transforming sprites 
+
+playerXimg = pygame.image.load("Sprites/playerXsprite.png")
+XIMAGE = pygame.transform.scale(playerXimg , (60 , 140)) 
+playerOimg = pygame.image.load("Sprites/playerOsprite.png")
+OIMAGE = pygame.transform.scale(playerOimg , (145 , 60))
+
+
+
+#Playabilty tests 
 
 tabla = Domineering.table
 tabla= Domineering.CreateTable(8,8)
 Domineering.PrintTable(tabla)
+Domineering.PlayMove("O",(3 ,"A"),tabla)
+Domineering.PlayMove("O",(5 ,"B"),tabla)
+Domineering.PlayMove("O",(7 ,"C"),tabla)
+Domineering.PlayMove("O",(8 ,"F"),tabla)
+Domineering.PlayMove("X",(2 ,"C"),tabla)
+Domineering.PlayMove("X",(5 ,"D"),tabla)
+Domineering.PlayMove("X",(3 ,"G"),tabla)
 
+# input field for MOVES 
+
+active = False
 column_input_rect = pygame.Rect(460,25,50,35)
+column_moveText =""
 MOVE_FONT = pygame.font.Font('freesansbold.ttf', 18)
 GAMEOVER_FONT = pygame.font.Font('freesansbold.ttf',50)
-column_moveText =""
 MOVE_TEXT = MOVE_FONT.render(column_moveText, True,BLACK, BG_COLOR)
-active = False
+
+
+# main drawing func 
 
 def draw_window(moveText):
-    WIN.fill(BG_COLOR)
-    for x in range(len(tabla)):
-        c = 65
-        n = 56
-        WIN.blit(MOVE_FONT.render(chr(c+x), True,BLACK, BG_COLOR),pygame.Rect(175+(x*SQUARE_DIM), 75, SQUARE_DIM,SQUARE_DIM))
-        WIN.blit(MOVE_FONT.render(chr(c+x), True,BLACK, BG_COLOR),pygame.Rect(175+(x*SQUARE_DIM),725, SQUARE_DIM,SQUARE_DIM))
-        WIN.blit(MOVE_FONT.render(chr(n-x) , True,BLACK, BG_COLOR),pygame.Rect(125, 125+(x*SQUARE_DIM), SQUARE_DIM,SQUARE_DIM))
-        WIN.blit(MOVE_FONT.render(chr(n-x) , True,BLACK, BG_COLOR),pygame.Rect(775, 125+(x*SQUARE_DIM), SQUARE_DIM,SQUARE_DIM))
 
+
+    WIN.fill(BG_COLOR)
+
+    # drawing of the n*n board + TEXT & CHAR borders        exmple => (8->1 ) (A -> H)
+
+    for x in range(len(tabla)):
+        c = 65 # A
+        n = 56 # 8 -> int (len (tabla))
+
+
+        WIN.blit(MOVE_FONT.render(chr(c+x), True,BLACK, BG_COLOR),pygame.Rect(175+(x*SQUARE_DIM), 75, SQUARE_DIM,SQUARE_DIM))   #drawing CHAR  border
+        WIN.blit(MOVE_FONT.render(chr(c+x), True,BLACK, BG_COLOR),pygame.Rect(175+(x*SQUARE_DIM),725, SQUARE_DIM,SQUARE_DIM))
+        WIN.blit(MOVE_FONT.render(chr(n-x) , True,BLACK, BG_COLOR),pygame.Rect(125, 125+(x*SQUARE_DIM), SQUARE_DIM,SQUARE_DIM)) #drawing INT border
+        WIN.blit(MOVE_FONT.render(chr(n-x) , True,BLACK, BG_COLOR),pygame.Rect(775, 125+(x*SQUARE_DIM), SQUARE_DIM,SQUARE_DIM))       
+
+        #input field  drawing 
         pygame.draw.rect(WIN,WHITE,column_input_rect,2)
         text_surface = MOVE_FONT.render(moveText,True,(0,0,0))
         WIN.blit(text_surface,(column_input_rect.x + 20 , column_input_rect.y + 10))
 
-        column_input_rect.w = max(50,text_surface.get_width() + 5)
+        column_input_rect.w = max(50,text_surface.get_width() + 5)    # dynamic field scaling 
         for y in range(len(tabla)):
             SQUARECOLOR = (255,255,255)
             pygame.draw.rect(WIN ,SQUARECOLOR ,
             pygame.Rect(150+(y*SQUARE_DIM),100+(x*SQUARE_DIM) , SQUARE_DIM,SQUARE_DIM), 2)
 
+
+    # drawing player O moves 
+
     for x in range(len(tabla)):
         for y in range(len(tabla)-1):
             if tabla[x][y] == "O" and tabla[x][y+1] == "O":
                     SQUARECOLOR = BLACK
-                    pygame.draw.rect(WIN ,SQUARECOLOR ,
-                    pygame.Rect(150+(y*SQUARE_DIM)+12.5,100+(x*SQUARE_DIM)+7.5 , 2*SQUARE_DIM-25,SQUARE_DIM-15))
+                    #pygame.draw.rect(WIN ,SQUARECOLOR ,
+                    #pygame.Rect(150+(y*SQUARE_DIM)+12.5,100+(x*SQUARE_DIM)+7.5 , 2*SQUARE_DIM-25,SQUARE_DIM-15))
+                    WIN.blit(OIMAGE, (152.5+(y*SQUARE_DIM),105+(x*SQUARE_DIM)))
+
+    # drawing player X moves 
 
     for x in range(len(tabla)-1):
         for y in range(len(tabla)):
             if tabla[x][y] == "X" and tabla[x+1][y] == "X":
                     SQUARECOLOR = ORANGE
-                    pygame.draw.rect(WIN ,SQUARECOLOR ,
-                    pygame.Rect(150+(y*SQUARE_DIM)+7.5,100+(x*SQUARE_DIM)+12.5 , SQUARE_DIM-15 ,2*SQUARE_DIM-25))
+                    #pygame.draw.rect(WIN ,SQUARECOLOR ,
+                    #pygame.Rect(150+(y*SQUARE_DIM)+7.5,100+(x*SQUARE_DIM)+12.5 , SQUARE_DIM-15 ,2*SQUARE_DIM-25))
+                    WIN.blit(XIMAGE, (157.5+(y*SQUARE_DIM),105+(x*SQUARE_DIM)))
     pygame.display.update()
+
+# playMove 
 
 def igrajPotez(moveText,player):
 
@@ -72,6 +116,7 @@ def igrajPotez(moveText,player):
         print(moveText[0],moveText[1])
         return True
 
+#helper translate (TRUE,FALSE) => ("X","O")
 
 def playerValue(player):
 
@@ -79,6 +124,8 @@ def playerValue(player):
         return 'X'
     return 'O'    
 
+
+#drwaing END GAME text and RESET after delay
 
 def drawEnd(player):
     pygame.time.delay(500)
@@ -92,12 +139,15 @@ def drawEnd(player):
     pygame.time.delay(4000)
     Reset()
 
+#set table values to their default ("-")
 
 def Reset():
     for i in range(len(tabla)):
         for j in range(len(tabla)):
             tabla[i][j] = "-"
 
+
+#Event handling and calling other funcs
 
 def main():
     clock = pygame.time.Clock()

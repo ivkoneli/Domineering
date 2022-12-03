@@ -146,6 +146,9 @@ def GameOver(player, table):
     return (True, player)
 
 
+
+# TESTING 
+# =============================
 #players = OpponentSelection()
 #myPlayer = players[0]
 #pcPlayer = players[1]
@@ -155,7 +158,7 @@ def GameOver(player, table):
 #PlayMove("O", (2, "A"), table)
 #PlayMove("O", (3, "A"), table)
 #PlayMove("X", (1, "C"), table)
-
+# =============================
 
 
 
