@@ -1,3 +1,5 @@
+import copy
+
 player = "X"
 pc = False
 table = []
@@ -92,32 +94,36 @@ def IsValid(player, move,table):
 def PlayMove(player, unFormatedMove,table):
     move = DecodeMove(unFormatedMove, table)
     valid = IsValid(player, move,table)
+
+    new_table = copy.deepcopy(table)
+
     if valid:
         if(player == "X"):
-            table[move[0]][move[1]] = player
-            table[move[0]-1][move[1]] = player
-            PrintTable(table)
-            istheGameOver = GameOver(player, table)
+            new_table[move[0]][move[1]] = player
+            new_table[move[0]-1][move[1]] = player
+            PrintTable(new_table)
+            istheGameOver = GameOver(player, new_table)
             print(istheGameOver)
             if istheGameOver[0] == False:
-                return True
+                return (True , new_table)
             else:
                 print(istheGameOver[1], "X Wins!")
-                return True
+                return (True , new_table)
         else:
-            table[move[0]][move[1]] = player
-            table[move[0]][move[1]+1] = player
-            PrintTable(table)
-            istheGameOver = GameOver(player, table)
+            new_table[move[0]][move[1]] = player
+            new_table[move[0]][move[1]+1] = player
+            PrintTable(new_table)
+            istheGameOver = GameOver(player, new_table)
             print(istheGameOver)
             if istheGameOver[0] == False:
-                return True
+                return (True , new_table)
             else:
                 print(istheGameOver[1], "O Wins!")
-                return True
+                return (True , new_table)
     else:
         print("Not valid")
-        return False
+        return (False , new_table)
+
 
 
 def DecodeMove(move,table):
@@ -129,6 +135,14 @@ def DecodeMove(move,table):
         i =  abs(move[0]-len(table))
     j = ord(move[1])-65
     return (i, j)
+
+def EncodeMove(field,table):
+
+    moveX = abs(field[0]-len(table))
+    moveY = chr(65 + field[1])
+    #print(moveX , moveY)
+    return (moveX , moveY)
+
 
 
 def GameOver(player, table):
@@ -145,19 +159,46 @@ def GameOver(player, table):
   
     return (True, player)
 
+def possibleMoves(tabla , player):
 
+    potezi = []
+
+    if player == "O":
+        for i in range(len(tabla)):
+            for j in range(len(tabla)-1):
+                if table[i][j] == '-' and table[i][j+1] == '-':
+                    valid = IsValid(player, (i,j),tabla)                   
+                    if valid :
+                        move = EncodeMove((i,j),tabla)
+                        potezi.append(move)
+                        #potezi.append((i,j))
+                    
+    else:
+        for i in range(len(tabla)-1):
+            for j in range(len(tabla)):
+                if table[i][j] == '-' and table[i+1][j] == '-':
+                    valid = IsValid(player, (i,j),tabla)                   
+                    if valid :
+                        move = EncodeMove((i,j),tabla)
+                        potezi.append(move)
+                        #potezi.append((i,j))
+
+    return potezi
 
 # TESTING 
 # =============================
 #players = OpponentSelection()
 #myPlayer = players[0]
 #pcPlayer = players[1]
-#table = CreateTable(3, 3)
-#PrintTable(table)
-#PlayMove("O", (1, "A"), table)
+table = CreateTable(8, 8)
+PrintTable(table)
+print(possibleMoves((table),"X"))
+novatablica = PlayMove("X", (1, "C"), table)
+print(possibleMoves((novatablica[1]),"X"))
+novatablica = PlayMove("O", (1, "A"), novatablica[1])
+print(possibleMoves((novatablica[1]),"O"))
 #PlayMove("O", (2, "A"), table)
 #PlayMove("O", (3, "A"), table)
-#PlayMove("X", (1, "C"), table)
 # =============================
 
 
