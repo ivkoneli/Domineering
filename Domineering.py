@@ -42,11 +42,20 @@ def OpponentSelection():
         print("Invalid input!")
 
 
-def CreateTable(x, y):
+def CreateTable(size):
+
+    if size == "small" :
+        x = 4 
+    elif size == "medium" :
+        x = 6
+    elif size == "large" :
+        x = 8
+
+
     table = list()
     for i in range(x):
         table.append(list())
-        for j in range(y):
+        for j in range(x):
             table[i].append('-')
     
     return table
@@ -185,18 +194,20 @@ def possibleMoves(tabla , player):
 
     return potezi
 
+
+
 # TESTING 
 # =============================
 #players = OpponentSelection()
 #myPlayer = players[0]
 #pcPlayer = players[1]
-table = CreateTable(8, 8)
-PrintTable(table)
-print(possibleMoves((table),"X"))
-novatablica = PlayMove("X", (1, "C"), table)
-print(possibleMoves((novatablica[1]),"X"))
-novatablica = PlayMove("O", (1, "A"), novatablica[1])
-print(possibleMoves((novatablica[1]),"O"))
+#table = CreateTable("medium")
+#PrintTable(table)
+#print(possibleMoves((table),"X"))
+#novatablica = PlayMove("X", (1, "C"), table)
+#print(possibleMoves((novatablica[1]),"X"))
+#novatablica = PlayMove("O", (1, "A"), novatablica[1])
+#print(possibleMoves((novatablica[1]),"O"))
 #PlayMove("O", (2, "A"), table)
 #PlayMove("O", (3, "A"), table)
 # =============================
