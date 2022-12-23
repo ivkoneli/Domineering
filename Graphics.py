@@ -84,7 +84,7 @@ GAMEOVER_FONT = pygame.font.Font('freesansbold.ttf',50)
 TITLE_FONT = pygame.font.Font('freesansbold.ttf',75)
 THEME_TEXT_FONT = pygame.font.Font('freesansbold.ttf',25)
 
-Tabla.TABLA = Domineering.CreateTable("medium")
+Tabla.TABLA = Domineering.CreateTable("Medium")
 
 
 def drawLargeBoard(Tamni, Svetli):
@@ -177,12 +177,16 @@ def drawSmallBoard(Tamni , Svetli):
 
 # main drawing func 
 
-def draw_window():
+def draw_window(text , rect):
 
     #print("Field je" , field)
 
     WIN.fill(BG_COLOR)
     # drawing of the n*n board + TEXT & CHAR borders        exmple => (8->1 ) (A -> H)
+
+
+    WIN.blit(text, rect)
+
 
 
     if   len(Tabla.TABLA) == 8 :   # large board
@@ -306,11 +310,25 @@ def play():
     run = True 
     active = False
     player = True
+    pc = False
+
+    NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : X",True, "#FF8C00")
+    NEXT_MOVE_RECT = NEXT_MOVE_TEXT.get_rect(center=(450,50))
+
+    
 
     while(run):
+
+
+
         clock.tick(FPS) 
         for event in pygame.event.get():  
-            draw_window()
+            if player :
+                NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : X",True, "#FF8C00")
+            else :
+                NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : O",True, "#FF8C00")
+
+            draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
@@ -319,6 +337,7 @@ def play():
             if event.type == pygame.KEYDOWN :
                 if event.key == pygame.K_ESCAPE:                   
                     run = False
+                    mainScreen()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 if pos[0] >= 150 and pos[0] <= 750 and pos[1] >=100 and pos[1] <=700 :
@@ -326,25 +345,32 @@ def play():
                     field = calculateField(pos)
                     move  = calculateMove(field)
                     valid = igrajPotez(move,player)
-                    draw_window()
-                    if valid :
-                        Valid_Sound.play()
-                        kraj = Domineering.GameOver(playerValue(player), Tabla.TABLA)
-                        player =  not player
-                        moveText = ""
-                        print("Da li je kraj",kraj[0])
-                        if kraj[0] :
-                            Victory_Sound.play()
-                            if not player : 
-                                drawEnd(playerValue(player))
-                            else :  
-                                drawEnd(playerValue(player))
-                                draw_window()
-                    else :
+                    nizPoteza = Domineering.possibleMoves(Tabla.TABLA,playerValue(not player))
+                    print(nizPoteza)
+                    if pc :
+                        igrajPotez(nizPoteza[0],False)
+                    else:
+                        draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                        if valid :
+                            Valid_Sound.play()
+                            kraj = Domineering.GameOver(playerValue(player), Tabla.TABLA)
+                            player =  not player
+                            moveText = ""
+                            print("Da li je kraj",kraj[0])
+                            if kraj[0] :
+                                Victory_Sound.play()
+                                if not player : 
+                                    drawEnd(playerValue(player))
+                                    player = True
+                                else :  
+                                    drawEnd(playerValue(player))
+                                    
+                            draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                        else :
                             Invalid_Sound.play()
                             print("Nije validan LICHE")
                             player = player                         
-    
+        
     # pygame.quit()            
 def optionsScreen():
 
@@ -460,15 +486,19 @@ def setup():
         for event in event_list:
             if event.type == pygame.QUIT:
                 run = False
+                quit()
             if event.type == pygame.KEYDOWN :
                 if event.key == pygame.K_ESCAPE:                   
                     run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if SUBMIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    Tabla.TABLA = Domineering.CreateTable(sizeSelect.main)
+                    print(sizeSelect.main)
                     play()                    
         selected_option = sizeSelect.update(event_list)
         if selected_option >= 0:
             sizeSelect.main = sizeSelect.options[selected_option]
+            #print(sizeSelect.main)
 
 
         sizeSelect.draw(WIN)

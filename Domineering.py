@@ -44,11 +44,11 @@ def OpponentSelection():
 
 def CreateTable(size):
 
-    if size == "small" :
+    if size == "Small" :
         x = 4 
-    elif size == "medium" :
+    elif size == "Medium" :
         x = 6
-    elif size == "large" :
+    elif size == "Large" :
         x = 8
 
 
@@ -171,27 +171,34 @@ def GameOver(player, table):
 def possibleMoves(tabla , player):
 
     potezi = []
+    print(len(tabla))
 
     if player == "O":
         for i in range(len(tabla)):
             for j in range(len(tabla)-1):
-                if table[i][j] == '-' and table[i][j+1] == '-':
+                if tabla[i][j] == '-' and tabla[i][j+1] == '-':
                     valid = IsValid(player, (i,j),tabla)                   
                     if valid :
                         move = EncodeMove((i,j),tabla)
                         potezi.append(move)
                         #potezi.append((i,j))
                     
-    else:
-        for i in range(len(tabla)-1):
+    elif player == "X":
+        for i in range(len(tabla)):
             for j in range(len(tabla)):
-                if table[i][j] == '-' and table[i+1][j] == '-':
-                    valid = IsValid(player, (i,j),tabla)                   
-                    if valid :
-                        move = EncodeMove((i,j),tabla)
-                        potezi.append(move)
-                        #potezi.append((i,j))
-
+                if i < len(tabla)-1:
+                    if tabla[i][j] == '-' and tabla[i+1][j] == '-':
+                        valid = IsValid(player, (i,j),tabla)                   
+                        if valid :
+                            move = EncodeMove((i,j),tabla)
+                            potezi.append(move)
+                            #potezi.append((i,j))
+                elif i >= len(tabla)-1:
+                    if tabla[i][j] == '-' :
+                        valid = IsValid(player, (i,j),tabla)                   
+                        if valid :
+                            move = EncodeMove((i,j),tabla)
+                            potezi.append(move)
     return potezi
 
 
