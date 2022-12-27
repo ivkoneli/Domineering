@@ -1,3 +1,6 @@
 TABLA = []
 DARK_SQUARE = (0,0,0)
 LIGHT_SQUARE = (179,172,172)
+PLAYER1 = True
+PLAYER2 = False
+PC = False

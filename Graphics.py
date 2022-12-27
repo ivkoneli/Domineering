@@ -4,6 +4,7 @@ import Tabla
 import os
 import sys
 from Button import Button
+from CheckBox import Checkbox
 from DropDown import DropDown
 from pygame import mixer
 pygame.init()
@@ -45,7 +46,9 @@ CYBERPUNK_THEME = pygame.image.load("Sprites/CyberPunkTheme.png")
 CYBERPUNK_THEME_IMAGE = pygame.transform.scale(CYBERPUNK_THEME , (100,100))
 DEFAULT_THEME = pygame.image.load("Sprites/DefaultTheme.png")
 DEFAULT_THEME_IMAGE = pygame.transform.scale(DEFAULT_THEME , (100,100))
-
+BGIMAGE_LAYER = pygame.image.load('Sprites/DimLayer.png').convert()
+BGIMAGE = pygame.transform.scale(BGIMAGE_LAYER,(900,800))
+BGIMAGE.set_alpha(128)
 playerXimg = pygame.image.load("Sprites/playerXsprite.png")
 XIMAGE = pygame.transform.scale(playerXimg , (60 , 140)) 
 playerOimg = pygame.image.load("Sprites/playerOsprite.png")
@@ -81,6 +84,7 @@ mixer.music.play(-1)
 #FONT INIT
 MOVE_FONT = pygame.font.Font('freesansbold.ttf', 18)
 GAMEOVER_FONT = pygame.font.Font('freesansbold.ttf',50)
+QUESTION_FONT = pygame.font.Font('freesansbold.ttf',35)
 TITLE_FONT = pygame.font.Font('freesansbold.ttf',75)
 THEME_TEXT_FONT = pygame.font.Font('freesansbold.ttf',25)
 
@@ -259,10 +263,10 @@ def drawEnd(player):
     pygame.time.delay(500)
     if player == "X":
         text_surface = GAMEOVER_FONT.render("BLACK WINS!",True, GREEN)
-        WIN.blit(text_surface,(320 , 350))
+        WIN.blit(text_surface,(270,350))
     else:
         text_surface = GAMEOVER_FONT.render("ORANGE WINS!",True, GREEN)
-        WIN.blit(text_surface,(320 , 350))
+        WIN.blit(text_surface,(270,350))
     pygame.display.flip()
     pygame.time.delay(4000)
     Reset()
@@ -359,6 +363,7 @@ def play():
                             print("Da li je kraj",kraj[0])
                             if kraj[0] :
                                 Victory_Sound.play()
+                                WIN.blit(BGIMAGE,(0,0))
                                 if not player : 
                                     drawEnd(playerValue(player))
                                     player = True
@@ -377,10 +382,22 @@ def optionsScreen():
     clock = pygame.time.Clock()
     run = True 
 
+
+
+
     while(run):
         clock.tick(FPS)
 
         WIN.fill(BG_COLOR)
+        boxes = []
+        DefaultCheckBox = Checkbox(WIN, 310, 540, 0, caption='')
+        ChessCheckBox = Checkbox(WIN, 310, 390, 1, caption='')
+        CrimsonCheckBox = Checkbox(WIN, 710, 540, 2, caption='')
+        CyberPunkCheckBox = Checkbox(WIN, 710, 390, 3, caption='')
+        boxes.append(DefaultCheckBox)
+        boxes.append(ChessCheckBox)
+        boxes.append(CrimsonCheckBox)
+        boxes.append(CyberPunkCheckBox)
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         #TITLE TEXT
@@ -421,8 +438,23 @@ def optionsScreen():
             button.changeColor(MENU_MOUSE_POS)  
             button.update(WIN)
 
+
+        if Tabla.LIGHT_SQUARE == (255,255,204) :
+            ChessCheckBox.checked = True
+        elif Tabla.LIGHT_SQUARE == (255,51,255):
+            CyberPunkCheckBox.checked = True
+        elif Tabla.LIGHT_SQUARE == (153,0,0):
+            CrimsonCheckBox.checked = True
+        elif Tabla.LIGHT_SQUARE ==(179,172,172):
+            DefaultCheckBox.checked = True
+
+
         # MAIN LOOP
-        pygame.display.flip()         
+
+        for box in boxes:
+            box.render_checkbox()
+        pygame.display.flip()
+        
         for event in pygame.event.get():  
             if event.type == pygame.QUIT:
                 quit()
@@ -430,6 +462,12 @@ def optionsScreen():
                 if event.key == pygame.K_ESCAPE:                   
                     run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                for box in boxes :
+                    box.update_checkbox(event)
+                    if box.checked is True:
+                        for b in boxes:
+                            if b != box:
+                                b.checked = False
                 if CHESS_THEME.checkForInput(MENU_MOUSE_POS):
                     Tabla.DARK_SQUARE = (51,102,0)
                     Tabla.LIGHT_SQUARE = (255,255,204)
@@ -442,6 +480,10 @@ def optionsScreen():
                 if DEFAULT_THEME.checkForInput(MENU_MOUSE_POS):
                     Tabla.DARK_SQUARE = (0,0,0)
                     Tabla.LIGHT_SQUARE = (179,172,172)
+
+
+
+
     pygame.display.flip()
                       
 def setup():
@@ -458,28 +500,65 @@ def setup():
     sizeSelect = DropDown(
     [COLOR_INACTIVE, COLOR_ACTIVE],
     [COLOR_LIST_INACTIVE, COLOR_LIST_ACTIVE],
-    350, 150, 200, 50, 
+    225, 150, 200, 50, 
     THEME_TEXT_FONT, 
     "Large", ["Small", "Medium","Large"])
 
     SIZE_TEXT = THEME_TEXT_FONT.render("Select size",True, "#FF8C00")
-    SIZE_RECT = SIZE_TEXT.get_rect(center=(450,130))
+    SIZE_RECT = SIZE_TEXT.get_rect(center=(325,130))
     WIN.blit(SIZE_TEXT,SIZE_RECT)
+
+    opponentSelect = DropDown(
+    [COLOR_INACTIVE, COLOR_ACTIVE],
+    [COLOR_LIST_INACTIVE, COLOR_LIST_ACTIVE],
+    475, 150, 200, 50, 
+    THEME_TEXT_FONT, 
+    "Player 2", ["Player 2","AI-Easy", "AI-Medium","AI-Hard"])
+
+    OPPONENT_TEXT = THEME_TEXT_FONT.render("Select Opponent",True, "#FF8C00")
+    OPPONENT_RECT = OPPONENT_TEXT.get_rect(center=(575,130))
+    WIN.blit(OPPONENT_TEXT,OPPONENT_RECT)
+
+
+    FIRST_PLAY_TEXT = QUESTION_FONT.render("Who plays first ?",True, "#FF8C00")
+    FIRST_PLAY_RECT = FIRST_PLAY_TEXT.get_rect(center=(WIDTH/2 , HEIGHT/2-50))
+    WIN.blit(FIRST_PLAY_TEXT,FIRST_PLAY_RECT)
 
     while(run):
 
         WIN.fill(BG_COLOR)
         MENU_MOUSE_POS = pygame.mouse.get_pos()
         clock.tick(FPS)
-
+        boxes = []
+        P1CheckBox = Checkbox(WIN, 405, 390, 1, caption='')
+        P2CheckBox = Checkbox(WIN, 635, 390, 2, caption='')
+        boxes.append(P1CheckBox)
+        boxes.append(P2CheckBox)
 
         SUBMIT_BUTTON = Button(image = None , pos=(WIDTH/2,HEIGHT/2+200),
                 text_input = "SUBMIT" , font = GAMEOVER_FONT, base_color ="Black", hovering_color ="Orange")
+        P1_BUTTON = Button(image = None , pos=(WIDTH/2-135,HEIGHT/2),
+                text_input = "PLAYER 1" , font = THEME_TEXT_FONT, base_color ="Black", hovering_color ="Orange")
+        P2_BUTTON = Button(image = None , pos=(WIDTH/2+100,HEIGHT/2),
+                text_input = "PLAYER 2" , font = THEME_TEXT_FONT, base_color ="Black", hovering_color ="Orange")       
         WIN.blit(SIZE_TEXT,SIZE_RECT)
+        WIN.blit(OPPONENT_TEXT,OPPONENT_RECT)
+        WIN.blit(FIRST_PLAY_TEXT,FIRST_PLAY_RECT)
 
-        for button in [SUBMIT_BUTTON] :
+        for button in [SUBMIT_BUTTON,P1_BUTTON,P2_BUTTON] :
             button.changeColor(MENU_MOUSE_POS)  
             button.update(WIN)
+
+
+        if Tabla.PLAYER1 == True :
+            P1CheckBox.checked = True
+        elif Tabla.PLAYER2 == True :
+            P2CheckBox.checked = True
+
+        for box in boxes:
+            box.render_checkbox()
+        #pygame.display.flip()
+
 
 
         event_list = pygame.event.get()
@@ -491,21 +570,48 @@ def setup():
                 if event.key == pygame.K_ESCAPE:                   
                     run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                for box in boxes :
+                    box.update_checkbox(event)
+                    if box.checked is True:
+                        for b in boxes:
+                            if b != box:
+                                b.checked = False
+                if P2_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    Tabla.PLAYER2 = True
+                    Tabla.PLAYER1 = False
+                if P1_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    Tabla.PLAYER1 = True
+                    Tabla.PLAYER2 = False
                 if SUBMIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     Tabla.TABLA = Domineering.CreateTable(sizeSelect.main)
                     print(sizeSelect.main)
-                    play()                    
+                    print(opponentSelect.main)
+                    if opponentSelect.main != "Player 2":
+                        Tabla.PC = True
+                    print("PLAYING FIRST :","PLAYER1" ,Tabla.PLAYER1 , "PLAYER2",Tabla.PLAYER2)
+                    print("Playing against a pc :", Tabla.PC)
+                    play()       
+
+
+
         selected_option = sizeSelect.update(event_list)
         if selected_option >= 0:
             sizeSelect.main = sizeSelect.options[selected_option]
-            #print(sizeSelect.main)
 
+        selected_opponent = opponentSelect.update(event_list)
+        if selected_opponent >=0:
+            opponentSelect.main = opponentSelect.options[selected_opponent]
 
+        
         sizeSelect.draw(WIN)
+        opponentSelect.draw(WIN)
         pygame.display.flip()
 
 
 def mainScreen():
+
+
+
 
 
     WIDTH , HEIGHT = pygame.display.get_window_size()
@@ -517,16 +623,17 @@ def mainScreen():
 
 
     while runConst :
-
+        clock.tick(FPS)
         WIN.fill(BG_COLOR)
-
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
         MENU_TEXT = TITLE_FONT.render("DOMINEERING",True, "#FF8C00")
         MENU_RECT = MENU_TEXT.get_rect(center=(450,160))
 
-        PLAY_BUTTON = Button(image = None , pos=(WIDTH/2,HEIGHT/2),
+        PLAY_BUTTON = Button(image = None , pos=(WIDTH/2,HEIGHT/2-70),
                             text_input = "PLAY" , font = GAMEOVER_FONT, base_color ="Black", hovering_color ="White")
+        LEVELS_BUTTON = Button(image = None , pos=(WIDTH/2,HEIGHT/2),
+                            text_input = "LEVELS" , font = GAMEOVER_FONT, base_color ="Black", hovering_color ="White")
         OPTIONS_BUTTON = Button(image = None , pos=(WIDTH/2,HEIGHT/2+70),
                             text_input = "OPTIONS" , font = GAMEOVER_FONT, base_color ="Black", hovering_color ="White")
         QUIT_BUTTON = Button(image = None , pos=(WIDTH/2,HEIGHT/2+140),
@@ -536,7 +643,7 @@ def mainScreen():
         WIN.blit(MENU_TEXT,MENU_RECT)
 
 
-        for button in [PLAY_BUTTON ,OPTIONS_BUTTON,QUIT_BUTTON, MUTE_BUTTON] :
+        for button in [PLAY_BUTTON ,OPTIONS_BUTTON,QUIT_BUTTON, MUTE_BUTTON, LEVELS_BUTTON] :
             button.changeColor(MENU_MOUSE_POS)  
             button.update(WIN)
             if mixer.music.get_volume() == 0 :
@@ -555,6 +662,9 @@ def mainScreen():
                     quit()
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
                     setup()
+                if LEVELS_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    Tabla.TABLA = Domineering.CreateTable("Medium")
+                    play()
                 if MUTE_BUTTON.checkForInput(MENU_MOUSE_POS):
                     if sound == True :
                         mixer.music.set_volume(0)
