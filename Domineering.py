@@ -1,12 +1,13 @@
 import copy
+import Tabla
 
-player = "X"
-pc = False
 table = []
-myPlayer = ""
-pcPlayer = ""
+#player = "X"
+#pc = False
+#myPlayer = ""
+#pcPlayer = ""
 
-def FirstMove():
+'''def FirstMove():
     answer = input("Do you want to play first?\n")
     yes = "yes"
     no = "no"
@@ -39,7 +40,7 @@ def OpponentSelection():
         print("Your opponent is human")
         return ("-", "-")
     else:
-        print("Invalid input!")
+        print("Invalid input!")'''
 
 
 def CreateTable(size):
@@ -82,7 +83,7 @@ def PrintTable(table):
     print(" ", letterlist)
 
 
-def IsValid(player, move,table):
+def IsValid(player, move, table):
     if move[0]<0 or move[0]> len(table)-1  or move[1]<0 or move[1]> len(table)-1:
         return False
     if player == "X":
@@ -132,8 +133,6 @@ def PlayMove(player, unFormatedMove,table):
                 return (True , new_table)'''
             return new_table
     else:
-        print("Not valid")
-        #return (False , new_table)
         return new_table
 
 
@@ -245,11 +244,9 @@ def heurstic(player, table):
 
 
 def max_stanje(lsv):
-    #print("Heuirstika je: ",lsv[0][1])
     return max(lsv, key=lambda x: x[1])
 
 def min_stanje(lsv):
-    #print("Heuristika je: ",lsv[0][1])
     return min(lsv, key=lambda x: x[1])
    
 
@@ -262,12 +259,8 @@ def minimax(stanje, dubina, moj_potez, potez = None):
 
     fja = max_stanje if moj_potez else min_stanje
     lp = possibleMoves(stanje, igrac)
-    #print("Moguci potezi: ",lp)
 
     if dubina == 0:
-        '''print("Igrac je: ",igrac)
-        PrintTable(stanje)'''
-        print("Potez:", potez, "Heuristika je: ",heurstic(igrac, stanje))
         return (potez, heurstic(igrac, stanje))
 
     if lp is None or len(lp) == 0:
@@ -294,25 +287,79 @@ def GameOverPC(player, table):
         return (True, -10)
 
 
+def Valid(player, move, table):
+    move = DecodeMove(move, table)
+    valid = IsValid(player, move, table)
+    if valid:
+        return True
+    return False
+
+
 def Game():
-    table = CreateTable("Small")
-  
-    igrac = "X" if input("Uneti igrača (X ili O): ") == "X" else "O"
-    moj = True if igrac == "X" else False
+    tableSize = input("Select one of these listed tables: Small, Medium, Large:")
+    table = CreateTable(tableSize)
+
+    PC = True if input("Do you want to play against computer?") == "yes" else False
+    moj = True if input("Do you want to play first?") == "yes" else False
+    igrac = "X"
     PrintTable(table)
 
     gameover = GameOverPC(igrac, table)
 
     while gameover[0] == False:
-        rez = minimax(table, 2, moj)
-        naj = rez[0] if type(rez) is tuple else (0, 0)
-        table = PlayMove(igrac, naj, table)
-        PrintTable(table)
-        igrac = "O" if igrac is "X" else "X"
-        moj = not moj
-        gameover = GameOver(igrac, table)
-    
-    print("Pobednik je: ", gameover[1])
+        if PC:
+            if moj:
+                move = list(input("It's your trun:"))
+                move[0] = int(move[0])
+                move = tuple(move)
+                valid = Valid(igrac, move, table)
+                table = PlayMove(igrac, move, table)
+                if valid:
+                    PrintTable(table)
+                    igrac = "O" if igrac == "X" else "X"
+                    moj = not moj
+                    gameover = GameOver(igrac, table)
+                else:
+                    print("Not Valid!")
+            else:
+                print("PC is playing...")
+                rez = minimax(table, 3, moj)
+                naj = rez[0] if type(rez) is tuple else (0, 0)
+                table = PlayMove(igrac, naj, table)
+                PrintTable(table)
+                igrac = "O" if igrac == "X" else "X"
+                moj = not moj
+                gameover = GameOver(igrac, table)
+        
+        else:
+            if moj:
+                move = list(input("Player1: It's your trun:"))
+                move[0] = int(move[0])
+                move = tuple(move)
+                valid = Valid(igrac, move, table)
+                table = PlayMove(igrac, move, table)
+                if valid:
+                    PrintTable(table)
+                    igrac = "O" if igrac == "X" else "X"
+                    moj = not moj
+                    gameover = GameOver(igrac, table)
+                else:
+                    print("Not Valid!")
+            else:
+                move = list(input("Player2: It's your trun:"))
+                move[0] = int(move[0])
+                move = tuple(move)
+                valid = Valid(igrac, move, table)
+                table = PlayMove(igrac, move, table)
+                if valid:
+                    PrintTable(table)
+                    igrac = "O" if igrac == "X" else "X"
+                    moj = not moj
+                    gameover = GameOver(igrac, table)
+                else:
+                    print("Not Valid!")
+        
+    print("The winner is: ", gameover[1])
 
 Game()
 
