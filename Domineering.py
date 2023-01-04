@@ -2,46 +2,6 @@ import copy
 import Tabla
 
 table = []
-#player = "X"
-#pc = False
-#myPlayer = ""
-#pcPlayer = ""
-
-'''def FirstMove():
-    answer = input("Do you want to play first?\n")
-    yes = "yes"
-    no = "no"
-    if answer == yes:
-        myPlayer1="X"
-        pcPlayer1="O"
-        print("1: me")
-        print("2: pc")
-        return (myPlayer1, pcPlayer1)
-    elif answer == no:
-        myPlayer1="O"
-        pcPlayer1="X"
-        print("1: pc")
-        print("2: me")
-        return (myPlayer1, pcPlayer1)
-    else:
-        print("Invalid input!")
-        return False
-
-
-def OpponentSelection():
-    answer = input("Do you want to play against computer?\n")
-    yes = "yes"
-    no = "no"
-    if answer == yes:
-        pc = True
-        players = FirstMove()
-        return players
-    elif answer == no:
-        print("Your opponent is human")
-        return ("-", "-")
-    else:
-        print("Invalid input!")'''
-
 
 def CreateTable(size):
 
@@ -171,7 +131,6 @@ def GameOver(player, table):
 def possibleMoves(tabla , player):
 
     potezi = []
-    #print(len(tabla))
 
     if player == "O":
         for i in range(len(tabla)):
@@ -194,7 +153,7 @@ def possibleMoves(tabla , player):
     return potezi
 
 
-def heurstic(player, table):
+def heuristic(player, table):
     h = 0
 
     if player == "X":
@@ -243,7 +202,61 @@ def heurstic(player, table):
     return h
 
 
-def max_stanje(lsv):
+def heuristicMove(player, table, move):
+    h = 0
+    move = DecodeMove(move, table)
+
+    if player == "X":
+        if move[1] == 0 or move[1] == len(table)-1:
+            if move[1] == 0:
+                if table[move[0]][move[1]+1] == "-":
+                    h+=1
+                if table[move[0]-1][move[1]+1] == "-":
+                    h+=1
+            else:
+                if table[move[0]][move[1]-1] == "-":
+                    h+=1
+                if table[move[0]-1][move[1]-1] == "-":
+                    h+=1
+        else:
+            if table[move[0]][move[1]+1] == "-":
+                h+=1
+            if table[move[0]][move[1]-1] == "-":
+                h+=1
+            if table[move[0]-1][move[1]+1] == "-":
+                h+=1
+            if table[move[0]-1][move[1]-1] == "-":
+                h+=1
+    
+    else:
+        if move[0] == 0 or move[0] == len(table)-1:
+            if move[0] == 0:
+                if table[move[0]+1][move[1]] == "-":
+                    h+=1
+                if table[move[0]+1][move[1]+1] == "-":
+                    h+=1
+            else:
+                if table[move[0]-1][move[1]] == "-":
+                    h+=1
+                if table[move[0]-1][move[1]+1] == "-":
+                    h+=1
+        else:
+            if table[move[0]+1][move[1]] == "-":
+                h+=1
+            if table[move[0]-1][move[1]] == "-":
+                h+=1
+            if table[move[0]+1][move[1]+1] == "-":
+                h+=1
+            if table[move[0]-1][move[1]+1] == "-":
+                h+=1
+
+    if player == "X":
+        return h+1
+    else:
+        return -1*h-1
+
+
+'''def max_stanje(lsv):
     return max(lsv, key=lambda x: x[1])
 
 def min_stanje(lsv):
@@ -261,30 +274,79 @@ def minimax(stanje, dubina, moj_potez, potez = None):
     lp = possibleMoves(stanje, igrac)
 
     if dubina == 0:
-        return (potez, heurstic(igrac, stanje))
+        return (potez, heuristic(igrac, stanje, potez))
 
     if lp is None or len(lp) == 0:
-        return (potez, heurstic(igrac, stanje))
+        return (potez, heuristic(igrac, stanje, potez))
 
-    return fja([minimax(PlayMove(igrac, x, stanje), dubina - 1, not moj_potez, x if potez is None else potez) for x in lp])
+    return fja([minimax(PlayMove(igrac, x, stanje), dubina - 1, not moj_potez, x if potez is None else potez) for x in lp])'''
             
 
-def GameOverPC(player, table):
-    if player == "X":
-        for i in range(len(table)):
-            for j in range(len(table)-1):
-                if table[i][j] == '-' and table[i][j+1] == '-':
-                    return (False, 0)
+def max_value(table, dubina, alpha, beta, move = None):
+
+    if abs(GameOverPC(table)) == 10:
+        return (move, GameOverPC(table))
+
+    possible_moves = list(possibleMoves(table, "X"))
+
+    if dubina == 0 or possible_moves is None or len(possible_moves) == 0:
+        return (move, heuristicMove("X", table, move))
     else:
-        for i in range(len(table)-1):
-            for j in range(len(table)):
-                if table[i][j] == '-' and table[i+1][j] == '-':
-                    return (False, 0)
+        for s in possible_moves:
+            alpha = max(alpha,
+                    min_value(PlayMove("X", s, table), dubina - 1, alpha, beta, s if move is None else move),
+                    key=lambda x: x[1])
+            if alpha[1] >= beta[1]:
+                return beta
+    return alpha
+
+
+def min_value(table, dubina, alpha, beta, move = None):
+
+    if abs(GameOverPC(table)) == 10:
+        return (move, GameOverPC(table))
+
+    possible_moves = list(possibleMoves(table, "O"))
     
-    if player == "X":
-        return (True, 10)
+    if dubina == 0 or possible_moves is None or len(possible_moves) == 0:
+        return (move, heuristicMove("O", table, move))
     else:
-        return (True, -10)
+        for s in possible_moves:
+            beta = min(beta,
+                    max_value(PlayMove("O", s, table), dubina - 1, alpha, beta, s if move is None else move),
+                    key=lambda x: x[1])
+            if beta[1] <= alpha[1]:
+                return alpha
+    return beta
+
+
+def minimax(table, dubina, moj_potez, alpha = (None, -100), beta = (None, 100)):
+    if moj_potez:
+        return max_value(table, dubina, alpha, beta)
+    else:
+        return min_value(table, dubina, alpha, beta)
+
+
+def GameOverPC(table):
+    X=0
+    O=0
+
+    for i in range(len(table)-1):
+        for j in range(len(table)):
+            if table[i][j] == '-' and table[i+1][j] == '-':
+                X+=1
+
+    for i in range(len(table)):
+        for j in range(len(table)-1):
+            if table[i][j] == '-' and table[i][j+1] == '-':
+                O+=1
+ 
+    if X != 0 and O != 0:
+        return 0
+    elif X != 0:
+        return 10
+    else: 
+        return -10
 
 
 def Valid(player, move, table):
@@ -300,66 +362,74 @@ def Game():
     table = CreateTable(tableSize)
 
     PC = True if input("Do you want to play against computer?") == "yes" else False
-    moj = True if input("Do you want to play first?") == "yes" else False
-    igrac = "X"
+    myTurn = True if input("Do you want to play first?") == "yes" else False
+
+    if myTurn:
+        player = "X"
+        myTurnPC = False
+    else:
+        player = "X"
+        myTurnPC = True
+    
     PrintTable(table)
 
-    gameover = GameOverPC(igrac, table)
+    gameover = GameOverPC(table)
 
-    while gameover[0] == False:
+    while gameover == 0:
         if PC:
-            if moj:
+            if myTurn:
                 move = list(input("It's your trun:"))
                 move[0] = int(move[0])
                 move = tuple(move)
-                valid = Valid(igrac, move, table)
-                table = PlayMove(igrac, move, table)
+                valid = Valid(player, move, table)
+                table = PlayMove(player, move, table)
                 if valid:
                     PrintTable(table)
-                    igrac = "O" if igrac == "X" else "X"
-                    moj = not moj
-                    gameover = GameOver(igrac, table)
+                    player = "O" if player == "X" else "X"
+                    myTurn = not myTurn
+                    gameover = GameOverPC(table)
                 else:
                     print("Not Valid!")
             else:
                 print("PC is playing...")
-                rez = minimax(table, 3, moj)
+                rez = minimax(table, 4, myTurnPC)
                 naj = rez[0] if type(rez) is tuple else (0, 0)
-                table = PlayMove(igrac, naj, table)
+                print(naj)
+                table = PlayMove(player, naj, table)
                 PrintTable(table)
-                igrac = "O" if igrac == "X" else "X"
-                moj = not moj
-                gameover = GameOver(igrac, table)
+                player = "O" if player == "X" else "X"
+                myTurn = not myTurn
+                gameover = GameOverPC(table)
         
         else:
-            if moj:
+            if myTurn:
                 move = list(input("Player1: It's your trun:"))
                 move[0] = int(move[0])
                 move = tuple(move)
-                valid = Valid(igrac, move, table)
-                table = PlayMove(igrac, move, table)
+                valid = Valid(player, move, table)
+                table = PlayMove(player, move, table)
                 if valid:
                     PrintTable(table)
-                    igrac = "O" if igrac == "X" else "X"
-                    moj = not moj
-                    gameover = GameOver(igrac, table)
+                    player = "O" if player == "X" else "X"
+                    myTurn = not myTurn
+                    gameover = GameOverPC(table)
                 else:
                     print("Not Valid!")
             else:
                 move = list(input("Player2: It's your trun:"))
                 move[0] = int(move[0])
                 move = tuple(move)
-                valid = Valid(igrac, move, table)
-                table = PlayMove(igrac, move, table)
+                valid = Valid(player, move, table)
+                table = PlayMove(player, move, table)
                 if valid:
                     PrintTable(table)
-                    igrac = "O" if igrac == "X" else "X"
-                    moj = not moj
-                    gameover = GameOver(igrac, table)
+                    player = "O" if player == "X" else "X"
+                    myTurn = not myTurn
+                    gameover = GameOverPC(table)
                 else:
                     print("Not Valid!")
         
-    print("The winner is: ", gameover[1])
+    print("The winner is: ", "X" if gameover == 10 else "O")
 
 Game()
 
