@@ -72,9 +72,9 @@ def PlayMove(player, unFormatedMove,table):
             new_table[move[0]][move[1]] = player
             new_table[move[0]-1][move[1]] = player
             #PrintTable(new_table)
-            '''istheGameOver = GameOver(player, new_table)
+            istheGameOver = GameOver(player, new_table)
             #print(istheGameOver)
-            if istheGameOver[0] == False:
+            '''if istheGameOver[0] == False:
                 return (True , new_table)
             else:
                 print(istheGameOver[1], "Wins!")
@@ -84,9 +84,9 @@ def PlayMove(player, unFormatedMove,table):
             new_table[move[0]][move[1]] = player
             new_table[move[0]][move[1]+1] = player
             #PrintTable(new_table)
-            '''istheGameOver = GameOver(player, new_table)
+            istheGameOver = GameOver(player, new_table)
             #print(istheGameOver)
-            if istheGameOver[0] == False:
+            '''if istheGameOver[0] == False:
                 return (True , new_table)
             else:
                 print(istheGameOver[1], "Wins!")
@@ -119,14 +119,14 @@ def GameOver(player, table):
         for i in range(len(table)):
             for j in range(len(table)-1):
                 if table[i][j] == '-' and table[i][j+1] == '-':
-                    return (False, player)
-    else:
+                    return False
+    elif player == "O":
         for i in range(len(table)-1):
             for j in range(len(table)):
                 if table[i][j] == '-' and table[i+1][j] == '-':
-                    return (False, player)
+                    return False
   
-    return (True, player)
+    return True
 
 def possibleMoves(tabla , player):
 
@@ -310,6 +310,7 @@ def min_value(table, dubina, parity, alpha, beta, move = None):
 
     possible_moves = list(possibleMoves(table, "O"))
     
+
     if dubina == 0 or possible_moves is None or len(possible_moves) == 0:
         if parity == 0:
             return (move, heuristicMove("O", table, move))
@@ -355,6 +356,7 @@ def GameOverPC(table):
 
 
 def Valid(player, move, table):
+
     move = DecodeMove(move, table)
     valid = IsValid(player, move, table)
     if valid:
@@ -436,7 +438,7 @@ def Game():
         
     print("The winner is: ", "X" if gameover == 10 else "O")
 
-Game()
+#Game()
 
 # TESTING 
 # =============================

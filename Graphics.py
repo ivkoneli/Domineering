@@ -239,13 +239,9 @@ def draw_window(text , rect):
 def igrajPotez(moveText,player):
   
     validanPotez =  Domineering.PlayMove(playerValue(player),(int(moveText[0]),moveText[1]),Tabla.TABLA) # true/false , novuTablu
-    Tabla.TABLA = validanPotez[1] 
+    Tabla.TABLA = validanPotez;
 
-    if not validanPotez[0]:
-        return False
-    else :    
-        print(moveText[0],moveText[1])
-        return True
+
 
 
 #helper translate (TRUE,FALSE) => ("X","O")
@@ -269,7 +265,11 @@ def drawEnd(player):
         WIN.blit(text_surface,(270,350))
     pygame.display.flip()
     pygame.time.delay(4000)
+    Tabla.PLAYER1 = True
+    Tabla.PLAYER2 = False
+    Tabla.PC = False
     Reset()
+    setup()
 
 #set table values to their default ("-")
 
@@ -344,24 +344,23 @@ def play():
                     mainScreen()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                if pos[0] >= 150 and pos[0] <= 750 and pos[1] >=100 and pos[1] <=700 :
-                    print(pos)
-                    field = calculateField(pos)
-                    move  = calculateMove(field)
-                    valid = igrajPotez(move,player)
-                    nizPoteza = Domineering.possibleMoves(Tabla.TABLA,playerValue(not player))
-                    print(nizPoteza)
-                    if pc :
-                        igrajPotez(nizPoteza[0],False)
-                    else:
+                if not Tabla.PC :
+                    if pos[0] >= 150 and pos[0] <= 750 and pos[1] >=100 and pos[1] <=700 :
+                        print(pos)
+                        field = calculateField(pos)
+                        move  = calculateMove(field)
+                        valid = Domineering.Valid(playerValue(player),move, Tabla.TABLA)
+                        print(valid)
+                        igrajPotez(move,player)
+                        
                         draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
                         if valid :
                             Valid_Sound.play()
                             kraj = Domineering.GameOver(playerValue(player), Tabla.TABLA)
                             player =  not player
                             moveText = ""
-                            print("Da li je kraj",kraj[0])
-                            if kraj[0] :
+                            print("Da li je kraj",kraj)
+                            if kraj :
                                 Victory_Sound.play()
                                 WIN.blit(BGIMAGE,(0,0))
                                 if not player : 
@@ -369,13 +368,64 @@ def play():
                                     player = True
                                 else :  
                                     drawEnd(playerValue(player))
-                                    
+                                        
                             draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
                         else :
                             Invalid_Sound.play()
                             print("Nije validan LICHE")
                             player = player                         
-        
+                else :
+                    if Tabla.PLAYER1 :
+                        # uzimamo input od misa nadjemo potez odigramo i onda odigra komp
+                        if pos[0] >= 150 and pos[0] <= 750 and pos[1] >=100 and pos[1] <=700 :
+                            print(pos)
+                            field = calculateField(pos)
+                            move  = calculateMove(field)
+                            valid = Domineering.Valid(playerValue(player),move, Tabla.TABLA)
+                            print(valid)
+                            igrajPotez(move,player)
+                            Domineering.PrintTable(Tabla.TABLA)
+                            draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+
+                            if valid :
+                                Valid_Sound.play()
+                                kraj = Domineering.GameOver("X", Tabla.TABLA)
+                                #player =  not player
+                                print("Da li je kraj COVEK",kraj)
+                                if kraj :
+                                    Victory_Sound.play()
+                                    WIN.blit(BGIMAGE,(0,0))
+                                    drawEnd("O")
+                                            
+                                draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                            else :
+                                Invalid_Sound.play()
+                                print("Nije validan LICHE")
+                                player = player  
+
+                        NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : O",True, "#FF8C00")
+                        draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                        rez = Domineering.minimax(Tabla.TABLA ,3,False)
+                        print(rez)
+                        slobodanPotez = Domineering.possibleMoves(Tabla.TABLA,"O")
+                        naj = slobodanPotez[0] if rez[0] is None else rez[0]
+                        print(naj)
+                        igrajPotez(naj,False)
+                        print("Kompjuter je odigrao", naj)
+                        Valid_Sound.play()
+                        kraj = Domineering.GameOver("O", Tabla.TABLA)
+                        draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                              
+                        print("Da li je kraj KOMP",kraj)
+                        if kraj :
+                                Victory_Sound.play()
+                                WIN.blit(BGIMAGE,(0,0))
+                                drawEnd("X")                        
+
+                    
+                    else :
+                        # odigra komp onda uzmemo potez i odigramo mi
+                        naj = Domineering.minimax(Tabla.TABLA ,3,True) 
     # pygame.quit()            
 def optionsScreen():
 
