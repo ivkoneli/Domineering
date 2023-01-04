@@ -282,7 +282,7 @@ def minimax(stanje, dubina, moj_potez, potez = None):
     return fja([minimax(PlayMove(igrac, x, stanje), dubina - 1, not moj_potez, x if potez is None else potez) for x in lp])'''
             
 
-def max_value(table, dubina, alpha, beta, move = None):
+def max_value(table, dubina, parity, alpha, beta, move = None):
 
     if abs(GameOverPC(table)) == 10:
         return (move, GameOverPC(table))
@@ -290,18 +290,20 @@ def max_value(table, dubina, alpha, beta, move = None):
     possible_moves = list(possibleMoves(table, "X"))
 
     if dubina == 0 or possible_moves is None or len(possible_moves) == 0:
-        return (move, heuristicMove("X", table, move))
+        if parity == 0:
+            return (move, heuristicMove("X", table, move))
+        return (move, heuristicMove("O", table, move))
     else:
         for s in possible_moves:
             alpha = max(alpha,
-                    min_value(PlayMove("X", s, table), dubina - 1, alpha, beta, s if move is None else move),
+                    min_value(PlayMove("X", s, table), dubina - 1, parity, alpha, beta, s if move is None else move),
                     key=lambda x: x[1])
             if alpha[1] >= beta[1]:
                 return beta
     return alpha
 
 
-def min_value(table, dubina, alpha, beta, move = None):
+def min_value(table, dubina, parity, alpha, beta, move = None):
 
     if abs(GameOverPC(table)) == 10:
         return (move, GameOverPC(table))
@@ -309,11 +311,13 @@ def min_value(table, dubina, alpha, beta, move = None):
     possible_moves = list(possibleMoves(table, "O"))
     
     if dubina == 0 or possible_moves is None or len(possible_moves) == 0:
-        return (move, heuristicMove("O", table, move))
+        if parity == 0:
+            return (move, heuristicMove("O", table, move))
+        return (move, heuristicMove("X", table, move))
     else:
         for s in possible_moves:
             beta = min(beta,
-                    max_value(PlayMove("O", s, table), dubina - 1, alpha, beta, s if move is None else move),
+                    max_value(PlayMove("O", s, table), dubina - 1, parity, alpha, beta, s if move is None else move),
                     key=lambda x: x[1])
             if beta[1] <= alpha[1]:
                 return alpha
@@ -321,10 +325,11 @@ def min_value(table, dubina, alpha, beta, move = None):
 
 
 def minimax(table, dubina, moj_potez, alpha = (None, -100), beta = (None, 100)):
+    parity = dubina % 2
     if moj_potez:
-        return max_value(table, dubina, alpha, beta)
+        return max_value(table, dubina, parity, alpha, beta)
     else:
-        return min_value(table, dubina, alpha, beta)
+        return min_value(table, dubina, parity, alpha, beta)
 
 
 def GameOverPC(table):
@@ -392,7 +397,7 @@ def Game():
                     print("Not Valid!")
             else:
                 print("PC is playing...")
-                rez = minimax(table, 4, myTurnPC)
+                rez = minimax(table, 5, myTurnPC)
                 naj = rez[0] if type(rez) is tuple else (0, 0)
                 print(naj)
                 table = PlayMove(player, naj, table)
