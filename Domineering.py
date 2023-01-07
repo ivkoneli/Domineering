@@ -71,26 +71,10 @@ def PlayMove(player, unFormatedMove,table):
         if(player == "X"):
             new_table[move[0]][move[1]] = player
             new_table[move[0]-1][move[1]] = player
-            #PrintTable(new_table)
-            istheGameOver = GameOver(player, new_table)
-            #print(istheGameOver)
-            '''if istheGameOver[0] == False:
-                return (True , new_table)
-            else:
-                print(istheGameOver[1], "Wins!")
-                return (True , new_table)'''
             return new_table
         else:
             new_table[move[0]][move[1]] = player
             new_table[move[0]][move[1]+1] = player
-            #PrintTable(new_table)
-            istheGameOver = GameOver(player, new_table)
-            #print(istheGameOver)
-            '''if istheGameOver[0] == False:
-                return (True , new_table)
-            else:
-                print(istheGameOver[1], "Wins!")
-                return (True , new_table)'''
             return new_table
     else:
         return new_table
@@ -164,19 +148,31 @@ def heuristic(player, table):
                         if j == 0:
                             if table[i][j+1] == "-":
                                 h+=1
+                            elif table[i][j+1] == "X":
+                                 h+=0.5
+                            elif table[i][j+1] == "O":
+                                h-=1
                         else:
                             if table[i][j-1] == "-":
-                                 h+=1
+                                h+=1
+                            elif table[i][j-1] == "X":
+                                h+=0.5
+                            elif table[i][j-1] == "O":
+                                h-=1
                 else:
                     if table[i][j] == "X":
                         if table[i][j+1] == "-":
                                 h+=1
                         elif table[i][j+1] == "X":
-                                 h+=1
+                                h+=0.5
+                        elif table[i][j+1] == "O":
+                                h-=1
                         if table[i][j-1] == "-":
                                 h+=1
                         elif table[i][j-1] == "X":
-                                 h+=1
+                                h+=0.5
+                        elif table[i][j-1] == "O":
+                                h-=1
     
     else:
         for i in range(len(table)):
@@ -185,24 +181,40 @@ def heuristic(player, table):
                     if table[i][j] == "O":      # uz gornju ili donju stranu table
                         if i == 0:
                             if table[i+1][j] == "-":
+                                h+=1
+                            elif table[i+1][j] == "O":
+                                h+=0.5
+                            elif table[i+1][j] == "X":
                                 h-=1
                         else:
                             if table[i-1][j] == "-":
-                                 h-=1
+                                h+=1
+                            elif table[i-1][j] == "O":
+                                h+=0.5
+                            elif table[i-1][j] == "X":
+                                h-=1
+                                
                 else:
                     if table[i][j] == "O":
                         if table[i+1][j] == "-":
-                                h-=1
+                                h+=1
                         elif table[i+1][j] == "O":
-                                 h-=1
-                        if table[i-1][j] == "-":
+                                h+=0.5
+                        elif table[i+1][j] == "X":
                                 h-=1
+                        if table[i-1][j] == "-":
+                                h+=1
                         elif table[i-1][j] == "O":
-                                 h-=1
-    return h
+                                h+=0.5
+                        elif table[i-1][j] == "X":
+                                h-=1
+    if player == "X":
+        return h
+    else:
+        return -1*h
 
 
-def heuristicMove(player, table, move):
+'''def heuristicMove(player, table, move):
     h = 0
     move = DecodeMove(move, table)
 
@@ -253,7 +265,7 @@ def heuristicMove(player, table, move):
     if player == "X":
         return h+1
     else:
-        return -1*h-1
+        return -1*h-1'''
 
 
 '''def max_stanje(lsv):
@@ -284,15 +296,15 @@ def minimax(stanje, dubina, moj_potez, potez = None):
 
 def max_value(table, dubina, parity, alpha, beta, move = None):
 
-    if abs(GameOverPC(table)) == 10:
+    if abs(GameOverPC(table)) == 100:
         return (move, GameOverPC(table))
 
     possible_moves = list(possibleMoves(table, "X"))
 
     if dubina == 0 or possible_moves is None or len(possible_moves) == 0:
         if parity == 0:
-            return (move, heuristicMove("X", table, move))
-        return (move, heuristicMove("O", table, move))
+            return (move, heuristic("X", table))
+        return (move, heuristic("O", table))
     else:
         for s in possible_moves:
             alpha = max(alpha,
@@ -305,7 +317,7 @@ def max_value(table, dubina, parity, alpha, beta, move = None):
 
 def min_value(table, dubina, parity, alpha, beta, move = None):
 
-    if abs(GameOverPC(table)) == 10:
+    if abs(GameOverPC(table)) == 100:
         return (move, GameOverPC(table))
 
     possible_moves = list(possibleMoves(table, "O"))
@@ -313,8 +325,8 @@ def min_value(table, dubina, parity, alpha, beta, move = None):
 
     if dubina == 0 or possible_moves is None or len(possible_moves) == 0:
         if parity == 0:
-            return (move, heuristicMove("O", table, move))
-        return (move, heuristicMove("X", table, move))
+            return (move, heuristic("O", table))
+        return (move, heuristic("X", table))
     else:
         for s in possible_moves:
             beta = min(beta,
@@ -325,7 +337,7 @@ def min_value(table, dubina, parity, alpha, beta, move = None):
     return beta
 
 
-def minimax(table, dubina, moj_potez, alpha = (None, -100), beta = (None, 100)):
+def minimax(table, dubina, moj_potez, alpha = (None, -1000), beta = (None, 1000)):
     parity = dubina % 2
     if moj_potez:
         return max_value(table, dubina, parity, alpha, beta)
@@ -350,9 +362,9 @@ def GameOverPC(table):
     if X != 0 and O != 0:
         return 0
     elif X != 0:
-        return 10
+        return 100
     else: 
-        return -10
+        return -100
 
 
 def Valid(player, move, table):
@@ -436,47 +448,10 @@ def Game():
                 else:
                     print("Not Valid!")
         
-    print("The winner is: ", "X" if gameover == 10 else "O")
+    print("The winner is: ", "X" if gameover == 100 else "O")
 
-#Game()
+Game()
 
-# TESTING 
-# =============================
-#players = OpponentSelection()
-#myPlayer = players[0]
-#pcPlayer = players[1]
-'''table = CreateTable("Small")
-PrintTable(table)'''
-'''novatablica = PlayMove("X", (1, "A"), table)
-print(possibleMoves((novatablica[1]),"X"))
-novatablica = PlayMove("X", (2, "B"), novatablica[1])
-print(possibleMoves((novatablica[1]),"X"))
-novatablica = PlayMove("X", (3, "C"), novatablica[1])
-print(possibleMoves((novatablica[1]),"X"))'''
-
-'''novatablica = PlayMove("O", (1, "A"), table)
-print(possibleMoves((novatablica[1]),"O"))
-novatablica = PlayMove("O", (2, "A"), novatablica[1])
-print(possibleMoves((novatablica[1]),"O"))
-novatablica = PlayMove("O", (3, "B"), novatablica[1])
-print(possibleMoves((novatablica[1]),"O"))'''
-
-
-# ova situacija je losa(vise nije, nadam se)
-'''novatablica = PlayMove("X", (3, "A"), table)
-novatablica = PlayMove("O", (2, "B"), novatablica[1])
-novatablica = PlayMove("X", (2, "D"), novatablica[1])
-novatablica = PlayMove("O", (1, "C"), novatablica[1])'''
-
-'''novatablica = PlayMove("X", (3, "A"), table)
-novatablica = PlayMove("O", (2, "B"), novatablica[1])
-novatablica = PlayMove("X", (3, "C"), novatablica[1])
-novatablica = PlayMove("O", (1, "C"), novatablica[1])
-
-
-heur = heurstic("X", novatablica[1])
-print("Heuristika je:", heur)'''
-# =========================== ==
 
 
 
