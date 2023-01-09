@@ -3,6 +3,7 @@ import Domineering
 import Tabla
 import os
 import sys
+import random
 from Button import Button
 from CheckBox import Checkbox
 from DropDown import DropDown
@@ -213,6 +214,40 @@ def draw_window(text , rect):
             if y == 1 :
                 if Tabla.TABLA[x][y] == "O" and Tabla.TABLA[x][y+1] == "O" and Tabla.TABLA[x][y-1] != "O":
                     WIN.blit(OIMAGE, (yDIM-5 +(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))
+            elif y == 2 :
+                if Tabla.TABLA[x][y] == "O" and Tabla.TABLA[x][y+1] == "O" and (
+                       (Tabla.TABLA[x][y-1] != "O" and Tabla.TABLA[x][y-2] != "O") 
+                    or (Tabla.TABLA[x][y-1] == "O" and Tabla.TABLA[x][y-2] == "O")
+                    ):
+                    WIN.blit(OIMAGE, (yDIM-5 +(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))
+            elif y == 3 :
+                if Tabla.TABLA[x][y] == "O" and Tabla.TABLA[x][y+1] == "O" and (
+                       (Tabla.TABLA[x][y-1] != "O" and Tabla.TABLA[x][y-2] != "O" and Tabla.TABLA[x][y-3] != "O")  # SVI SU razliciti od O 
+                    or (Tabla.TABLA[x][y-1] == "O" and Tabla.TABLA[x][y-2] == "O" and Tabla.TABLA[x][y-3] != "O")  # 2 i 3 su O  3 je razlicito
+                    or (Tabla.TABLA[x][y-1] != "O" and Tabla.TABLA[x][y-2] == "O" and Tabla.TABLA[x][y-3] == "O")  # 1 i 2 su O  1 je razlicito
+                    ):
+                    WIN.blit(OIMAGE, (yDIM-5 +(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))  
+            elif y == 4 :
+                if Tabla.TABLA[x][y] == "O" and Tabla.TABLA[x][y+1] == "O" and (
+                       (Tabla.TABLA[x][y-1] != "O" and Tabla.TABLA[x][y-2] != "O" and Tabla.TABLA[x][y-3] != "O" and Tabla.TABLA[x][y-4] != "O")  # SVI SU razliciti od O 
+                    or (Tabla.TABLA[x][y-1] == "O" and Tabla.TABLA[x][y-2] == "O" and Tabla.TABLA[x][y-3] == "O" and Tabla.TABLA[x][y-4] == "O")  # SVI SU O
+                    or (Tabla.TABLA[x][y-1] == "O" and Tabla.TABLA[x][y-2] == "O" and Tabla.TABLA[x][y-3] != "O" and Tabla.TABLA[x][y-4] != "O")  # 1 i 2 su O  ostalo razlicito
+                    or (Tabla.TABLA[x][y-1] != "O" and Tabla.TABLA[x][y-2] != "O" and Tabla.TABLA[x][y-3] == "O" and Tabla.TABLA[x][y-4] == "O")  # 3 i 4 su O  ostalo razlicito
+                    or (Tabla.TABLA[x][y-1] != "O" and Tabla.TABLA[x][y-2] == "O" and Tabla.TABLA[x][y-3] == "O" and Tabla.TABLA[x][y-4] != "O")  # 2 i 3 su O  ostalo razlicito
+                    ):
+                    WIN.blit(OIMAGE, (yDIM-5 +(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))
+            elif y == 5 :
+                if Tabla.TABLA[x][y] == "O" and Tabla.TABLA[x][y+1] == "O" and (
+                       (Tabla.TABLA[x][y-1] != "O" and Tabla.TABLA[x][y-2] != "O" and Tabla.TABLA[x][y-3] != "O" and Tabla.TABLA[x][y-4] != "O" and Tabla.TABLA[x][y-5] != "O")  # SVI SU razliciti od O 
+                    or (Tabla.TABLA[x][y-1] != "O" and Tabla.TABLA[x][y-2] != "O" and Tabla.TABLA[x][y-3] != "O" and Tabla.TABLA[x][y-4] == "O" and Tabla.TABLA[x][y-5] == "O")  # 1 i 2 su O  ostalo razlicito
+                    or (Tabla.TABLA[x][y-1] != "O" and Tabla.TABLA[x][y-2] != "O" and Tabla.TABLA[x][y-3] == "O" and Tabla.TABLA[x][y-4] == "O" and Tabla.TABLA[x][y-5] != "O")  # 2 i 3 su O  ostalo razlicito
+                    or (Tabla.TABLA[x][y-1] != "O" and Tabla.TABLA[x][y-2] == "O" and Tabla.TABLA[x][y-3] == "O" and Tabla.TABLA[x][y-4] != "O" and Tabla.TABLA[x][y-5] != "O")  # 3 i 4 su O  ostalo razlicito
+                    or (Tabla.TABLA[x][y-1] == "O" and Tabla.TABLA[x][y-2] == "O" and Tabla.TABLA[x][y-3] != "O" and Tabla.TABLA[x][y-4] != "O" and Tabla.TABLA[x][y-5] != "O")  # 4 i 5 su O  ostalo razlicito
+                    or (Tabla.TABLA[x][y-1] != "O" and Tabla.TABLA[x][y-2] == "O" and Tabla.TABLA[x][y-3] == "O" and Tabla.TABLA[x][y-4] == "O" and Tabla.TABLA[x][y-5] == "O")  # 5 je razlicit od O
+                    or (Tabla.TABLA[x][y-1] == "O" and Tabla.TABLA[x][y-2] == "O" and Tabla.TABLA[x][y-3] != "O" and Tabla.TABLA[x][y-4] == "O" and Tabla.TABLA[x][y-5] == "O")  # 3 je razlicit od O
+                    or (Tabla.TABLA[x][y-1] == "O" and Tabla.TABLA[x][y-2] == "O" and Tabla.TABLA[x][y-3] == "O" and Tabla.TABLA[x][y-4] == "O" and Tabla.TABLA[x][y-5] != "O")  # 1 je razlicit od O
+                    ):
+                    WIN.blit(OIMAGE, (yDIM-5 +(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))                                                             
             else :
                 if Tabla.TABLA[x][y] == "O" and Tabla.TABLA[x][y+1] == "O" :
                     WIN.blit(OIMAGE, (yDIM+(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))
@@ -224,6 +259,40 @@ def draw_window(text , rect):
             if x == 1 :
                 if Tabla.TABLA[x][y] == "X" and Tabla.TABLA[x+1][y] == "X" and Tabla.TABLA[x-1][y] != "X":
                     WIN.blit(XIMAGE, (yDIM+(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))
+            elif x == 2 :
+                if Tabla.TABLA[x][y] == "X" and Tabla.TABLA[x+1][y] == "X" and (
+                       (Tabla.TABLA[x-1][y] == "X" and Tabla.TABLA[x-2][y] == "X") # SVI X
+                    or (Tabla.TABLA[x-1][y] != "X" and Tabla.TABLA[x-2][y] != "X") # svi razliciti od X
+                    ):
+                    WIN.blit(XIMAGE, (yDIM+(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))
+            elif x == 3 :
+                if Tabla.TABLA[x][y] == "X" and Tabla.TABLA[x+1][y] == "X" and (
+                       (Tabla.TABLA[x-1][y] == "X" and Tabla.TABLA[x-2][y] == "X" and Tabla.TABLA[x-3][y] != "X")   # SVI SU X
+                    or (Tabla.TABLA[x-1][y] != "X" and Tabla.TABLA[x-2][y] != "X" and Tabla.TABLA[x-3][y] != "X")   # SVI RAZLICITI OD X
+                    or (Tabla.TABLA[x-1][y] != "X" and Tabla.TABLA[x-2][y] == "X" and Tabla.TABLA[x-3][y] == "X")   # 1 i 2 su X 3 razlicito
+                    ): 
+                    WIN.blit(XIMAGE, (yDIM+(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))
+            elif  x == 4 :
+                if Tabla.TABLA[x][y] == "X" and Tabla.TABLA[x+1][y] == "X" and (
+                       (Tabla.TABLA[x-1][y] == "X" and Tabla.TABLA[x-2][y] == "X" and Tabla.TABLA[x-3][y] == "X" and Tabla.TABLA[x-4][y] == "X")   # SVI SU X
+                    or (Tabla.TABLA[x-1][y] != "X" and Tabla.TABLA[x-2][y] != "X" and Tabla.TABLA[x-3][y] != "X" and Tabla.TABLA[x-4][y] != "X")   # SVI SU RAZLICITI OD X 
+                    or (Tabla.TABLA[x-1][y] == "X" and Tabla.TABLA[x-2][y] == "X" and Tabla.TABLA[x-3][y] != "X" and Tabla.TABLA[x-4][y] != "X")   # 1 i 2 su X ostalo razlicito
+                    or (Tabla.TABLA[x-1][y] != "X" and Tabla.TABLA[x-2][y] != "X" and Tabla.TABLA[x-3][y] == "X" and Tabla.TABLA[x-4][y] == "X")   # 3 i 4 su X ostalo razlicito
+                    or (Tabla.TABLA[x-1][y] != "X" and Tabla.TABLA[x-2][y] == "X" and Tabla.TABLA[x-3][y] == "X" and Tabla.TABLA[x-4][y] != "X")   # 2 i 3 su X ostalo razlicito
+                    ): 
+                    WIN.blit(XIMAGE, (yDIM+(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))  
+            elif  x == 5 :
+                if Tabla.TABLA[x][y] == "X" and Tabla.TABLA[x+1][y] == "X" and (
+                       (Tabla.TABLA[x-1][y] != "X" and Tabla.TABLA[x-2][y] != "X" and Tabla.TABLA[x-3][y] != "X" and Tabla.TABLA[x-4][y] != "X" and Tabla.TABLA[x-5][y] != "X")   # SVI RAZLICITI OD X
+                    or (Tabla.TABLA[x-1][y] != "X" and Tabla.TABLA[x-2][y] != "X" and Tabla.TABLA[x-3][y] != "X" and Tabla.TABLA[x-4][y] == "X" and Tabla.TABLA[x-5][y] == "X")   # 1 i 2 su X ostalo razlicito
+                    or (Tabla.TABLA[x-1][y] != "X" and Tabla.TABLA[x-2][y] != "X" and Tabla.TABLA[x-3][y] == "X" and Tabla.TABLA[x-4][y] == "X" and Tabla.TABLA[x-5][y] != "X")   # 2 i 3 su X ostalo razlicito
+                    or (Tabla.TABLA[x-1][y] != "X" and Tabla.TABLA[x-2][y] == "X" and Tabla.TABLA[x-3][y] == "X" and Tabla.TABLA[x-4][y] != "X" and Tabla.TABLA[x-5][y] != "X")   # 3 i 4 su X ostalo razlicito
+                    or (Tabla.TABLA[x-1][y] == "X" and Tabla.TABLA[x-2][y] == "X" and Tabla.TABLA[x-3][y] != "X" and Tabla.TABLA[x-4][y] != "X" and Tabla.TABLA[x-5][y] != "X")   # 4 i 5 su X ostalo razlicito
+                    or (Tabla.TABLA[x-1][y] != "X" and Tabla.TABLA[x-2][y] == "X" and Tabla.TABLA[x-3][y] == "X" and Tabla.TABLA[x-4][y] == "X" and Tabla.TABLA[x-5][y] == "X")   # 5 je razlicit ostali su X 
+                    or (Tabla.TABLA[x-1][y] == "X" and Tabla.TABLA[x-2][y] == "X" and Tabla.TABLA[x-3][y] != "X" and Tabla.TABLA[x-4][y] == "X" and Tabla.TABLA[x-5][y] == "X")   # 3 je razlicit ostali su X
+                    or (Tabla.TABLA[x-1][y] == "X" and Tabla.TABLA[x-2][y] == "X" and Tabla.TABLA[x-3][y] == "X" and Tabla.TABLA[x-4][y] == "X" and Tabla.TABLA[x-5][y] != "X")   # 1 je razlicit ostali su X
+                    ): 
+                    WIN.blit(XIMAGE, (yDIM+(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))                            
             else :
                 if Tabla.TABLA[x][y] == "X" and Tabla.TABLA[x+1][y] == "X" :
                     WIN.blit(XIMAGE, (yDIM+(y*SQUARE_DIM),xDIM+(x*SQUARE_DIM)))
@@ -303,6 +372,181 @@ def calculateMove(field):
 
 
 #Event handling and calling other funcs
+def playPC():
+   
+    clock = pygame.time.Clock()
+    Valid_Sound = mixer.Sound('Sounds/ValidSound.mp3')
+    Invalid_Sound = mixer.Sound('Sounds/InvalidSound.mp3')
+    Victory_Sound = mixer.Sound('Sounds/VictorySound.mp3')
+    run = True 
+    player = True
+  
+
+    NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : X",True, "#FF8C00")
+    NEXT_MOVE_RECT = NEXT_MOVE_TEXT.get_rect(center=(450,50))
+
+
+    while(run):
+
+        clock.tick(FPS) 
+        for event in pygame.event.get():  
+            if player :
+                NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : X",True, "#FF8C00")
+            else :
+                NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : O",True, "#FF8C00")
+
+            draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+                sys.exit
+                exit()
+            if event.type == pygame.KEYDOWN :
+                if event.key == pygame.K_ESCAPE:                   
+                    run = False
+                    mainScreen()
+                # HUMAN PLAYER1 || AI PLAYER 2
+            if Tabla.PLAYER1 :
+                # NAS POTEZ X igrac
+                    if player :
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            pos = pygame.mouse.get_pos()
+                        # uzimamo input od misa nadjemo potez odigramo i onda odigra komp
+                            if pos[0] >= 150 and pos[0] <= 750 and pos[1] >=100 and pos[1] <=700 :
+                                print(pos)
+                                field = calculateField(pos)
+                                move  = calculateMove(field)
+                                valid = Domineering.Valid(playerValue(player),move, Tabla.TABLA)
+                                print(valid)
+
+
+                                if valid :
+                                    igrajPotez(move,player)
+                                    Domineering.PrintTable(Tabla.TABLA)
+                                    draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                                    Valid_Sound.play()
+                                    kraj = Domineering.GameOver("X", Tabla.TABLA)
+                                    print("Da li je kraj COVEK",kraj)
+                                    player = False
+                                    if kraj :
+                                        Victory_Sound.play()
+                                        WIN.blit(BGIMAGE,(0,0))
+                                        drawEnd("O")
+                                                
+                                    draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                                else :
+                                    player = True
+                                    Invalid_Sound.play()
+                                    print("Nije validan LICHE")
+                # Kompjuterov potez  O IGRAC               
+                    else :
+                        if Tabla.AIHard :
+                            NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : O",True, "#FF8C00")
+                            draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                            rez = Domineering.minimax(Tabla.TABLA ,3,False)
+                            print(rez)
+                            slobodanPotez = Domineering.possibleMoves(Tabla.TABLA,"O")
+                            naj = slobodanPotez[0] if rez[0] is None else rez[0]
+                            print(naj)
+                            igrajPotez(naj,False)
+                            print("Kompjuter je odigrao", naj)
+                            Valid_Sound.play()
+                            kraj = Domineering.GameOver("O", Tabla.TABLA)
+                            draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                            player = True
+                            print("Da li je kraj KOMP",kraj)
+                            if kraj :
+                                    Victory_Sound.play()
+                                    WIN.blit(BGIMAGE,(0,0))
+                                    drawEnd("X")                        
+                        elif not Tabla.AIHard :
+                            NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : O",True, "#FF8C00")
+                            draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                            slobodanPotez = Domineering.possibleMoves(Tabla.TABLA,"O")
+                            naj = random.choice(slobodanPotez)
+                            print(naj)
+                            igrajPotez(naj,False)
+                            print("Kompjuter je odigrao", naj)
+                            Valid_Sound.play()
+                            kraj = Domineering.GameOver("O", Tabla.TABLA)
+                            draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                            player = True
+                            print("Da li je kraj KOMP",kraj)
+                            if kraj :
+                                    Victory_Sound.play()
+                                    WIN.blit(BGIMAGE,(0,0))
+                                    drawEnd("X") 
+                # AI PLAYER 1 ||  HUMAN PLAYER 2
+            elif Tabla.PLAYER2  :                      
+                # Kompjuterov potez X IGRAC
+                if player :
+                    if Tabla.AIHard :
+                        NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : X",True, "#FF8C00")
+                        draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                        rez = Domineering.minimax(Tabla.TABLA ,3,True)
+                        print(rez)
+                        slobodanPotez = Domineering.possibleMoves(Tabla.TABLA,"X")
+                        naj = slobodanPotez[0] if rez[0] is None else rez[0]
+                        print(naj)
+                        igrajPotez(naj,True)
+                        print("Kompjuter je odigrao", naj)
+                        Valid_Sound.play()
+                        kraj = Domineering.GameOver("X", Tabla.TABLA)
+                        draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                        player = False
+                        print("Da li je kraj KOMP",kraj)
+                        if kraj :
+                                Victory_Sound.play()
+                                WIN.blit(BGIMAGE,(0,0))
+                                drawEnd("O")  
+                    elif not Tabla.AIHard :
+                        NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : X",True, "#FF8C00")
+                        draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                        slobodanPotez = Domineering.possibleMoves(Tabla.TABLA,"X")
+                        naj = random.choice(slobodanPotez)
+                        print(naj)
+                        igrajPotez(naj,True)
+                        print("Kompjuter je odigrao", naj)
+                        Valid_Sound.play()
+                        kraj = Domineering.GameOver("X", Tabla.TABLA)
+                        draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                        player = False
+                        print("Da li je kraj KOMP",kraj)
+                        if kraj :
+                                Victory_Sound.play()
+                                WIN.blit(BGIMAGE,(0,0))
+                                drawEnd("O")  
+                # Nas potez  O IGRAC
+                else :
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                            pos = pygame.mouse.get_pos()
+                        # uzimamo input od misa nadjemo potez odigramo i onda odigra komp
+                            if pos[0] >= 150 and pos[0] <= 750 and pos[1] >=100 and pos[1] <=700 :
+                                print(pos)
+                                field = calculateField(pos)
+                                move  = calculateMove(field)
+                                valid = Domineering.Valid(playerValue(player),move, Tabla.TABLA)
+                                print(valid)
+
+
+                                if valid :
+                                    igrajPotez(move,player)
+                                    Domineering.PrintTable(Tabla.TABLA)
+                                    draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                                    Valid_Sound.play()
+                                    kraj = Domineering.GameOver("O", Tabla.TABLA)
+                                    print("Da li je kraj COVEK",kraj)
+                                    player = True
+                                    if kraj :
+                                        Victory_Sound.play()
+                                        WIN.blit(BGIMAGE,(0,0))
+                                        drawEnd("X")
+                                                
+                                    draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
+                                else :
+                                    player = False
+                                    Invalid_Sound.play()
+                                    print("Nije validan LICHE")                   
 
 def play():
    
@@ -374,58 +618,7 @@ def play():
                             Invalid_Sound.play()
                             print("Nije validan LICHE")
                             player = player                         
-                else :
-                    if Tabla.PLAYER1 :
-                        # uzimamo input od misa nadjemo potez odigramo i onda odigra komp
-                        if pos[0] >= 150 and pos[0] <= 750 and pos[1] >=100 and pos[1] <=700 :
-                            print(pos)
-                            field = calculateField(pos)
-                            move  = calculateMove(field)
-                            valid = Domineering.Valid(playerValue(player),move, Tabla.TABLA)
-                            print(valid)
-                            igrajPotez(move,player)
-                            Domineering.PrintTable(Tabla.TABLA)
-                            draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
-
-                            if valid :
-                                Valid_Sound.play()
-                                kraj = Domineering.GameOver("X", Tabla.TABLA)
-                                #player =  not player
-                                print("Da li je kraj COVEK",kraj)
-                                if kraj :
-                                    Victory_Sound.play()
-                                    WIN.blit(BGIMAGE,(0,0))
-                                    drawEnd("O")
-                                            
-                                draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
-                            else :
-                                Invalid_Sound.play()
-                                print("Nije validan LICHE")
-                                player = player  
-
-                        NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : O",True, "#FF8C00")
-                        draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
-                        rez = Domineering.minimax(Tabla.TABLA ,3,False)
-                        print(rez)
-                        slobodanPotez = Domineering.possibleMoves(Tabla.TABLA,"O")
-                        naj = slobodanPotez[0] if rez[0] is None else rez[0]
-                        print(naj)
-                        igrajPotez(naj,False)
-                        print("Kompjuter je odigrao", naj)
-                        Valid_Sound.play()
-                        kraj = Domineering.GameOver("O", Tabla.TABLA)
-                        draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
-                              
-                        print("Da li je kraj KOMP",kraj)
-                        if kraj :
-                                Victory_Sound.play()
-                                WIN.blit(BGIMAGE,(0,0))
-                                drawEnd("X")                        
-
-                    
-                    else :
-                        # odigra komp onda uzmemo potez i odigramo mi
-                        naj = Domineering.minimax(Tabla.TABLA ,3,True) 
+              
     # pygame.quit()            
 def optionsScreen():
 
@@ -638,8 +831,18 @@ def setup():
                     print(opponentSelect.main)
                     if opponentSelect.main != "Player 2":
                         Tabla.PC = True
+                    if opponentSelect.main == "AI-Hard":
+                        Tabla.AIHard = True
+                    else :
+                        Tabla.AIHard = False
+                    if Tabla.AIHard :
+                        print("Difficulty : HARD")
+                    elif not Tabla.AIHard : 
+                        print ("Difficulty : EASY")            
                     print("PLAYING FIRST :","PLAYER1" ,Tabla.PLAYER1 , "PLAYER2",Tabla.PLAYER2)
                     print("Playing against a pc :", Tabla.PC)
+                    if Tabla.PC :
+                        playPC()
                     play()       
 
 

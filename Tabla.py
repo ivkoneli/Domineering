@@ -4,3 +4,4 @@ LIGHT_SQUARE = (179,172,172)
 PLAYER1 = True
 PLAYER2 = False
 PC = False
+AIHard = False
