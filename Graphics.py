@@ -62,7 +62,7 @@ VOLUME_OFF = pygame.transform.scale(VolumeOFFimg , (60,60))
 # Loading sounds 
 
 mixer.music.load("Sounds/BackGroundMusic.mp3")
-mixer.music.play(-1)
+#mixer.music.play(-1)
 
 
 #Playabilty tests 
@@ -375,9 +375,9 @@ def calculateMove(field):
 def playPC():
    
     clock = pygame.time.Clock()
-    Valid_Sound = mixer.Sound('Sounds/ValidSound.mp3')
-    Invalid_Sound = mixer.Sound('Sounds/InvalidSound.mp3')
-    Victory_Sound = mixer.Sound('Sounds/VictorySound.mp3')
+    #Valid_Sound = mixer.Sound('Sounds/ValidSound.mp3')
+    #Invalid_Sound = mixer.Sound('Sounds/InvalidSound.mp3')
+    #Victory_Sound = mixer.Sound('Sounds/VictorySound.mp3')
     run = True 
     player = True
   
@@ -424,39 +424,54 @@ def playPC():
                                     igrajPotez(move,player)
                                     Domineering.PrintTable(Tabla.TABLA)
                                     draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
-                                    Valid_Sound.play()
+                                    #Valid_Sound = 
+                                    mixer.music.load('Sounds/ValidSound.mp3')
+                                    mixer.music.play(1)
+                                    #Valid_Sound.play(1)
                                     kraj = Domineering.GameOver("X", Tabla.TABLA)
                                     print("Da li je kraj COVEK",kraj)
                                     player = False
-                                    if kraj :
-                                        Victory_Sound.play()
+                                    if kraj :       
+                                        #Victory_Sound = 
+                                        mixer.music.load('Sounds/VictorySound.mp3')
+                                        mixer.music.play(1)
+                                        #Victory_Sound.play(1)
                                         WIN.blit(BGIMAGE,(0,0))
                                         drawEnd("O")
                                                 
                                     draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
                                 else :
                                     player = True
-                                    Invalid_Sound.play()
+                                    #Invalid_Sound = 
+                                    mixer.music.load('Sounds/InvalidSound.mp3')
+                                    mixer.music.play(1)
+                                    #Invalid_Sound.play(1)
                                     print("Nije validan LICHE")
                 # Kompjuterov potez  O IGRAC               
                     else :
                         if Tabla.AIHard :
                             NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : O",True, "#FF8C00")
                             draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
-                            rez = Domineering.minimax(Tabla.TABLA ,3,False)
+                            rez = Domineering.minimax(Tabla.TABLA ,4,False)
                             print(rez)
                             slobodanPotez = Domineering.possibleMoves(Tabla.TABLA,"O")
                             naj = slobodanPotez[0] if rez[0] is None else rez[0]
                             print(naj)
                             igrajPotez(naj,False)
                             print("Kompjuter je odigrao", naj)
-                            Valid_Sound.play()
+                            #Valid_Sound = 
+                            mixer.music.load('Sounds/ValidSound.mp3')
+                            mixer.music.play(1)
+                            #Valid_Sound.play(1)
                             kraj = Domineering.GameOver("O", Tabla.TABLA)
                             draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
                             player = True
                             print("Da li je kraj KOMP",kraj)
                             if kraj :
-                                    Victory_Sound.play()
+                                    #Victory_Sound = 
+                                    mixer.music.load('Sounds/VictorySound.mp3')
+                                    mixer.music.play(1)
+                                    #Victory_Sound.play(1)
                                     WIN.blit(BGIMAGE,(0,0))
                                     drawEnd("X")                        
                         elif not Tabla.AIHard :
@@ -465,15 +480,22 @@ def playPC():
                             slobodanPotez = Domineering.possibleMoves(Tabla.TABLA,"O")
                             naj = random.choice(slobodanPotez)
                             print(naj)
+                            pygame.time.delay(1000)
                             igrajPotez(naj,False)
                             print("Kompjuter je odigrao", naj)
-                            Valid_Sound.play()
+                            #Valid_Sound = 
+                            mixer.music.load('Sounds/ValidSound.mp3')
+                            mixer.music.play(1)
+                            #Valid_Sound.play(1)
                             kraj = Domineering.GameOver("O", Tabla.TABLA)
                             draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
                             player = True
                             print("Da li je kraj KOMP",kraj)
                             if kraj :
-                                    Victory_Sound.play()
+                                    #Victory_Sound = 
+                                    mixer.music.load('Sounds/VictorySound.mp3')
+                                    mixer.music.play(1)
+                                    #Victory_Sound.play(1)
                                     WIN.blit(BGIMAGE,(0,0))
                                     drawEnd("X") 
                 # AI PLAYER 1 ||  HUMAN PLAYER 2
@@ -483,20 +505,25 @@ def playPC():
                     if Tabla.AIHard :
                         NEXT_MOVE_TEXT = GAMEOVER_FONT.render("CURENTLY PLAYING : X",True, "#FF8C00")
                         draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
-                        rez = Domineering.minimax(Tabla.TABLA ,3,True)
+                        rez = Domineering.minimax(Tabla.TABLA ,4,True)
                         print(rez)
                         slobodanPotez = Domineering.possibleMoves(Tabla.TABLA,"X")
                         naj = slobodanPotez[0] if rez[0] is None else rez[0]
                         print(naj)
                         igrajPotez(naj,True)
                         print("Kompjuter je odigrao", naj)
-                        Valid_Sound.play()
+                        #Valid_Sound = 
+                        mixer.music.load('Sounds/ValidSound.mp3')
+                        mixer.music.play(1)
                         kraj = Domineering.GameOver("X", Tabla.TABLA)
                         draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
                         player = False
                         print("Da li je kraj KOMP",kraj)
                         if kraj :
-                                Victory_Sound.play()
+                                #Victory_Sound = 
+                                mixer.music.load('Sounds/VictorySound.mp3')
+                                mixer.music.play(1)
+                                #Victory_Sound.play(1)
                                 WIN.blit(BGIMAGE,(0,0))
                                 drawEnd("O")  
                     elif not Tabla.AIHard :
@@ -505,15 +532,22 @@ def playPC():
                         slobodanPotez = Domineering.possibleMoves(Tabla.TABLA,"X")
                         naj = random.choice(slobodanPotez)
                         print(naj)
+                        pygame.time.delay(1000)
                         igrajPotez(naj,True)
                         print("Kompjuter je odigrao", naj)
-                        Valid_Sound.play()
+                        #Valid_Sound = 
+                        mixer.music.load('Sounds/ValidSound.mp3')
+                        mixer.music.play(1)
+                        #Valid_Sound.play(1)
                         kraj = Domineering.GameOver("X", Tabla.TABLA)
                         draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
                         player = False
                         print("Da li je kraj KOMP",kraj)
                         if kraj :
-                                Victory_Sound.play()
+                                #Victory_Sound = 
+                                mixer.music.load('Sounds/VictorySound.mp3')
+                                mixer.music.play(1)
+                                #Victory_Sound.play(1)
                                 WIN.blit(BGIMAGE,(0,0))
                                 drawEnd("O")  
                 # Nas potez  O IGRAC
@@ -533,28 +567,37 @@ def playPC():
                                     igrajPotez(move,player)
                                     Domineering.PrintTable(Tabla.TABLA)
                                     draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
-                                    Valid_Sound.play()
+                                    #Valid_Sound = 
+                                    mixer.music.load('Sounds/ValidSound.mp3')
+                                    mixer.music.play(1)
+                                    #Valid_Sound.play(1)
                                     kraj = Domineering.GameOver("O", Tabla.TABLA)
                                     print("Da li je kraj COVEK",kraj)
                                     player = True
                                     if kraj :
-                                        Victory_Sound.play()
+                                        #Victory_Sound = 
+                                        mixer.music.load('Sounds/VictorySound.mp3')
+                                        mixer.music.play(1)
+                                        #Victory_Sound.play(1)
                                         WIN.blit(BGIMAGE,(0,0))
                                         drawEnd("X")
                                                 
                                     draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
                                 else :
                                     player = False
-                                    Invalid_Sound.play()
+                                    #Invalid_Sound = 
+                                    mixer.music.load('Sounds/InvalidSound.mp3')
+                                    mixer.music.play(1)
+                                    #Invalid_Sound.play(1)
                                     print("Nije validan LICHE")                   
 
 def play():
    
 
     clock = pygame.time.Clock()
-    Valid_Sound = mixer.Sound('Sounds/ValidSound.mp3')
-    Invalid_Sound = mixer.Sound('Sounds/InvalidSound.mp3')
-    Victory_Sound = mixer.Sound('Sounds/VictorySound.mp3')
+    #Valid_Sound = mixer.Sound('Sounds/ValidSound.mp3')
+    #Invalid_Sound = mixer.Sound('Sounds/InvalidSound.mp3')
+    #Victory_Sound = mixer.Sound('Sounds/VictorySound.mp3')
     run = True 
     active = False
     player = True
@@ -599,13 +642,19 @@ def play():
                         
                         draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
                         if valid :
-                            Valid_Sound.play()
+                            #Valid_Sound = 
+                            mixer.music.load('Sounds/ValidSound.mp3')
+                            mixer.music.play(1)
+                            #Valid_Sound.play(1)
                             kraj = Domineering.GameOver(playerValue(player), Tabla.TABLA)
                             player =  not player
                             moveText = ""
                             print("Da li je kraj",kraj)
                             if kraj :
-                                Victory_Sound.play()
+                                #Victory_Sound = 
+                                mixer.music.load('Sounds/VictorySound.mp3')
+                                mixer.music.play(1)
+                                #Victory_Sound.play(1)
                                 WIN.blit(BGIMAGE,(0,0))
                                 if not player : 
                                     drawEnd(playerValue(player))
@@ -615,7 +664,10 @@ def play():
                                         
                             draw_window(NEXT_MOVE_TEXT,NEXT_MOVE_RECT)
                         else :
-                            Invalid_Sound.play()
+                            #Invalid_Sound = 
+                            mixer.music.load('Sounds/InvalidSound.mp3')
+                            mixer.music.play(1)
+                            #Invalid_Sound.play(1)
                             print("Nije validan LICHE")
                             player = player                         
               

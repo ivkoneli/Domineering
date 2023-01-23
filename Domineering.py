@@ -214,86 +214,6 @@ def heuristic(player, table):
         return -1*h
 
 
-'''def heuristicMove(player, table, move):
-    h = 0
-    move = DecodeMove(move, table)
-
-    if player == "X":
-        if move[1] == 0 or move[1] == len(table)-1:
-            if move[1] == 0:
-                if table[move[0]][move[1]+1] == "-":
-                    h+=1
-                if table[move[0]-1][move[1]+1] == "-":
-                    h+=1
-            else:
-                if table[move[0]][move[1]-1] == "-":
-                    h+=1
-                if table[move[0]-1][move[1]-1] == "-":
-                    h+=1
-        else:
-            if table[move[0]][move[1]+1] == "-":
-                h+=1
-            if table[move[0]][move[1]-1] == "-":
-                h+=1
-            if table[move[0]-1][move[1]+1] == "-":
-                h+=1
-            if table[move[0]-1][move[1]-1] == "-":
-                h+=1
-    
-    else:
-        if move[0] == 0 or move[0] == len(table)-1:
-            if move[0] == 0:
-                if table[move[0]+1][move[1]] == "-":
-                    h+=1
-                if table[move[0]+1][move[1]+1] == "-":
-                    h+=1
-            else:
-                if table[move[0]-1][move[1]] == "-":
-                    h+=1
-                if table[move[0]-1][move[1]+1] == "-":
-                    h+=1
-        else:
-            if table[move[0]+1][move[1]] == "-":
-                h+=1
-            if table[move[0]-1][move[1]] == "-":
-                h+=1
-            if table[move[0]+1][move[1]+1] == "-":
-                h+=1
-            if table[move[0]-1][move[1]+1] == "-":
-                h+=1
-
-    if player == "X":
-        return h+1
-    else:
-        return -1*h-1'''
-
-
-'''def max_stanje(lsv):
-    return max(lsv, key=lambda x: x[1])
-
-def min_stanje(lsv):
-    return min(lsv, key=lambda x: x[1])
-   
-
-def minimax(stanje, dubina, moj_potez, potez = None):
-
-    igrac = "X" if moj_potez else "O"
-    gameover = GameOverPC(igrac, stanje)
-    if gameover[0] == True:
-        return(potez, gameover[1]) 
-
-    fja = max_stanje if moj_potez else min_stanje
-    lp = possibleMoves(stanje, igrac)
-
-    if dubina == 0:
-        return (potez, heuristic(igrac, stanje, potez))
-
-    if lp is None or len(lp) == 0:
-        return (potez, heuristic(igrac, stanje, potez))
-
-    return fja([minimax(PlayMove(igrac, x, stanje), dubina - 1, not moj_potez, x if potez is None else potez) for x in lp])'''
-            
-
 def max_value(table, dubina, parity, alpha, beta, move = None):
 
     if abs(GameOverPC(table)) == 100:
@@ -411,7 +331,7 @@ def Game():
                     print("Not Valid!")
             else:
                 print("PC is playing...")
-                rez = minimax(table, 5, myTurnPC)
+                rez = minimax(table, 4, myTurnPC)
                 naj = rez[0] if type(rez) is tuple else (0, 0)
                 print(naj)
                 table = PlayMove(player, naj, table)
